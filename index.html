@@ -3,469 +3,507 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thư viện sách nhà văn hóa TTBTXH Tân Hiệp</title>
+    <title>Thư Viện Sách Nhà Văn Hóa TTBTXH Tân Hiệp</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Thư viện đọc file Excel SheetJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
+<body class="bg-emerald-50 text-slate-800 font-sans pb-12">
 
-    <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-8">
-        <!-- Header -->
-        <header class="bg-indigo-600 text-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+    <!-- Header chính -->
+    <header class="bg-emerald-700 text-white p-6 shadow-md mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold">📚 Thư viện sách nhà văn hóa TTBTXH Tân Hiệp</h1>
+                <h1 class="text-2xl font-bold">🌿 Thư Viện Sách </h1>
+                <p class="text-xs text-emerald-100 mt-1">Hệ thống quản lý sách, 9 nhà , Nhật ký truy cập</p>
             </div>
-            <!-- Menu nhảy nhanh đến các mục -->
-            <div class="flex flex-wrap gap-2 justify-center">
-                <a href="#sec-search" class="px-3 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow text-sm transition">Tra cứu chung</a>
-                <a href="#sec-thang9" class="px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition">📅 Tháng 9</a>
-                <a href="#sec-thang11" class="px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition">📅 Tháng 11</a>
-                <a href="#sec-borrow" class="px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition">Mượn / Trả</a>
-                <a href="#sec-manage" class="px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition">Thêm Sách</a>
+            <!-- Menu nhanh -->
+            <div class="flex flex-wrap gap-2 text-sm font-medium">
+                <a href="#block-library" class="px-3 py-1.5 bg-emerald-800 rounded-lg hover:bg-emerald-900 transition">1. Thư Viện sách và quản lý 9 Nhà</a>
+                <a href="#block-months" class="px-3 py-1.5 bg-blue-700 rounded-lg hover:bg-blue-800 transition">2. Tháng 9/2026</a>
+                <a href="#block-months" class="px-3 py-1.5 bg-blue-700 rounded-lg hover:bg-blue-800 transition">3. Tháng 11/2025</a>
+                <a href="#block-report" class="px-3 py-1.5 bg-amber-600 rounded-lg hover:bg-amber-700 transition">4. Báo Cáo </a>
+                <a href="#block-logs" class="px-3 py-1.5 bg-purple-700 rounded-lg hover:bg-purple-800 transition">5. Nhật Ký Truy Cập</a>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- 1. TRA CỨU TỔNG HỢP -->
-        <section id="sec-search" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-            <h2 class="text-lg font-bold text-indigo-600 border-b pb-2">🔍 1. Tra Cứu Kho Sách Chung</h2>
-            <div class="flex gap-2">
-                <input type="text" id="searchInput" placeholder="Nhập từ khóa (Mã sách, Barcode, Tên sách, SĐKCB...)" class="flex-1 px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
-                <button type="button" onclick="searchBooks()" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition text-sm">Tìm kiếm</button>
-            </div>
-            <div class="flex justify-between items-center pt-2">
-                <span class="font-bold text-slate-700 text-sm">Danh mục sách tổng hợp</span>
-                <span id="totalBooksCount" class="text-xs bg-slate-100 px-3 py-1 rounded-full text-slate-600 font-medium"></span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                            <th class="p-3">Barcode / Mã</th>
-                            <th class="p-3">SĐKCB</th>
-                            <th class="p-3">Tên Sách</th>
-                            <th class="p-3">Môn loại</th>
-                            <th class="p-3">Đơn vị / Nhà</th>
-                            <th class="p-3">Giá tiền</th>
-                            <th class="p-3">Trạng Thái</th>
-                            <th class="p-3">Người Mượn / Số thẻ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
-                </table>
-            </div>
-        </section>
+    <div class="max-w-7xl mx-auto px-4 space-y-10">
 
-        <!-- 2. DANH SÁCH THÁNG 9 -->
-        <section id="sec-thang9" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-            <h2 class="text-lg font-bold text-indigo-600 border-b pb-2">📌 2. Danh Sách Sách Tháng 9</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <input type="file" id="excelFileThang9" accept=".xlsx, .xls, .csv" class="md:col-span-2 p-2.5 border border-slate-300 rounded-xl text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700">
-                <button type="button" onclick="uploadMonthExcel('thang9')" class="py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition text-sm">Nạp Bảng Tháng 9</button>
+        <!-- ================= Ô BỰ 1: THƯ VIỆN SÁCH & 9 NHÀ (MÀU XANH LÁ) ================= -->
+        <section id="block-library" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-emerald-500 space-y-6">
+            <div class="bg-emerald-600 text-white p-4 rounded-2xl flex justify-between items-center">
+                <h2 class="text-lg font-bold">📚 Ô 1: Quản Lý Kho Sách Chung & 9 Nhà (Mượn / Trả)</h2>
+                <span class="text-xs bg-emerald-800 px-3 py-1 rounded-full font-semibold">Chủ đạo Xanh Lá</span>
             </div>
-            <div class="flex gap-2">
-                <input type="text" id="searchThang9Input" placeholder="Dò từ khóa trong Tháng 9 (Mã, Tên sách, Số thẻ)..." class="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm">
-                <button type="button" onclick="filterMonth('thang9')" class="px-5 py-2 bg-slate-800 text-white font-medium rounded-xl text-sm">Dò tìm</button>
-            </div>
-            <div class="flex justify-between items-center pt-2">
-                <span class="font-bold text-indigo-900 text-sm">Bảng dữ liệu sách Tháng 9/2026</span>
-                <span id="countThang9" class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">0 cuốn</span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                            <th class="p-3">Barcode / Mã</th>
-                            <th class="p-3">SĐKCB</th>
-                            <th class="p-3">Tên Sách</th>
-                            <th class="p-3">Môn loại</th>
-                            <th class="p-3">Đơn vị / Nhà</th>
-                            <th class="p-3">Giá tiền</th>
-                            <th class="p-3">Số thẻ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableThang9Body" class="divide-y divide-slate-100 text-sm"></tbody>
-                </table>
-            </div>
-        </section>
 
-        <!-- 3. DANH SÁCH THÁNG 11/2025 -->
-        <section id="sec-thang11" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-            <h2 class="text-lg font-bold text-emerald-600 border-b pb-2">📌 3. Danh Sách Sách Tháng 11</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <input type="file" id="excelFileThang11" accept=".xlsx, .xls, .csv" class="md:col-span-2 p-2.5 border border-slate-300 rounded-xl text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700">
-                <button type="button" onclick="uploadMonthExcel('thang11')" class="py-2.5 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition text-sm">Nạp Bảng Tháng 11</button>
+            <!-- Khu vực nhập sách (Excel hoặc Lẻ) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
+                <div>
+                    <h3 class="font-bold text-emerald-900 text-sm mb-2">📁 Nhập sách hàng loạt (File Excel)</h3>
+                    <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" class="w-full p-2 border border-emerald-300 rounded-xl text-xs mb-2 bg-white file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-100 file:text-emerald-800">
+                    <button type="button" onclick="handleExcelUpload()" class="w-full py-2 bg-emerald-700 text-white font-semibold rounded-xl hover:bg-emerald-800 transition text-sm">Nạp File Vào Kho</button>
+                </div>
+                <div>
+                    <h3 class="font-bold text-emerald-900 text-sm mb-2">➕ Nhập lẻ từng quyển</h3>
+                    <form id="addBookForm" onsubmit="handleAddBook(event)" class="space-y-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="newCode" required placeholder="Mã sách / Barcode *" class="px-3 py-1.5 border border-emerald-300 rounded-xl text-xs bg-white">
+                            <input type="text" id="newTitle" required placeholder="Tên sách *" class="px-3 py-1.5 border border-emerald-300 rounded-xl text-xs bg-white">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="newCenter" class="px-3 py-1.5 border border-emerald-300 rounded-xl text-xs bg-white">
+                                <option value="Nhà 1">Nhà 1</option><option value="Nhà 2">Nhà 2</option><option value="Nhà 3">Nhà 3</option>
+                                <option value="Nhà 4">Nhà 4</option><option value="Nhà 5">Nhà 5</option><option value="Nhà 6">Nhà 6</option>
+                                <option value="Nhà 7">Nhà 7</option><option value="Nhà 8">Nhà 8</option><option value="Nhà 9">Nhà 9</option>
+                            </select>
+                            <input type="text" id="newPrice" placeholder="Giá tiền" class="px-3 py-1.5 border border-emerald-300 rounded-xl text-xs bg-white">
+                        </div>
+                        <button type="submit" class="w-full py-2 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition text-sm">Lưu Sách Lẻ</button>
+                    </form>
+                </div>
             </div>
-            <div class="flex gap-2">
-                <input type="text" id="searchThang11Input" placeholder="Dò từ khóa trong Tháng 11 (Mã, Tên sách, Số thẻ)..." class="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm">
-                <button type="button" onclick="filterMonth('thang11')" class="px-5 py-2 bg-slate-800 text-white font-medium rounded-xl text-sm">Dò tìm</button>
-            </div>
-            <div class="flex justify-between items-center pt-2">
-                <span class="font-bold text-emerald-900 text-sm">Bảng dữ liệu sách Tháng 11</span>
-                <span id="countThang11" class="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium">0 cuốn</span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                            <th class="p-3">Barcode / Mã</th>
-                            <th class="p-3">SĐKCB</th>
-                            <th class="p-3">Tên Sách</th>
-                            <th class="p-3">Môn loại</th>
-                            <th class="p-3">Đơn vị / Nhà</th>
-                            <th class="p-3">Giá tiền</th>
-                            <th class="p-3">Số thẻ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableThang11Body" class="divide-y divide-slate-100 text-sm"></tbody>
-                </table>
-            </div>
-        </section>
 
-        <!-- 4. MƯỢN / TRẢ SÁCH -->
-        <section id="sec-borrow" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg font-bold text-indigo-600 mb-4 border-b pb-2">📖 4. Lập Phiếu Mượn Sách</h2>
-                <form id="borrowForm" onsubmit="handleBorrow(event)" class="space-y-4">
+            <!-- Khu vực Mượn Sách cho 9 Nhà & Kiểm tra cuối tháng -->
+            <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 space-y-4">
+                <h3 class="font-bold text-emerald-900 text-sm">📖 Đăng Ký Mượn Sách Theo 9 Nhà & Thống Kê Cuối Tháng</h3>
+                
+                <form id="borrowForm" onsubmit="handleBorrow(event)" class="grid grid-cols-1 md:grid-cols-5 gap-2 items-end">
                     <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Mã sách / Barcode:</label>
-                        <input type="text" id="borrowBookCode" required placeholder="VD: S001" class="w-full px-4 py-2 border border-slate-300 rounded-xl text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Số thẻ độc giả / Kí số thẻ:</label>
-                        <input type="text" id="borrowCardId" required placeholder="VD: CARD-2026-001" class="w-full px-4 py-2 border border-slate-300 rounded-xl text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Họ tên người mượn:</label>
-                        <input type="text" id="borrowerName" required placeholder="VD: Nguyễn Văn A" class="w-full px-4 py-2 border border-slate-300 rounded-xl text-sm">
-                    </div>
-                    <button type="submit" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition text-sm">Xác Nhận Cho Mượn</button>
-                </form>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg font-bold text-emerald-600 mb-4 border-b pb-2">🔄 Trả Sách</h2>
-                <form id="returnForm" onsubmit="handleReturn(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">Mã sách / Barcode trả:</label>
-                        <input type="text" id="returnBookCode" required placeholder="VD: S001" class="w-full px-4 py-2 border border-slate-300 rounded-xl text-sm">
-                    </div>
-                    <div class="pt-8">
-                        <p class="text-xs text-slate-500 mb-2">* Cập nhật trạng thái sách về "Có sẵn".</p>
-                        <button type="submit" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition text-sm">Xác Nhận Đã Trả Sách</button>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <!-- 5. THÊM SÁCH THỦ CÔNG & EXCEL CHUNG -->
-        <section id="sec-manage" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg font-bold text-emerald-600 mb-2 border-b pb-2">📁 Tải Lên Excel Kho Chung</h2>
-                <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700">
-                <button type="button" onclick="handleExcelUpload()" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition text-sm">Nạp Vào Kho Chung</button>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-lg font-bold text-indigo-600 mb-4 border-b pb-2">➕ Thêm Lẻ Một Cuốn Sách</h2>
-                <form id="addBookForm" onsubmit="handleAddBook(event)" class="space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="newCode" required placeholder="Mã sách / Barcode *" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                        <input type="text" id="newSdkcb" placeholder="SĐKCB" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                    </div>
-                    <input type="text" id="newTitle" required placeholder="Tên sách *" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="newCategory" placeholder="Môn loại" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                        <input type="text" id="newPrice" placeholder="Giá tiền" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="newCenter" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                        <label class="block text-xs font-semibold text-emerald-800 mb-1">Chọn Nhà:</label>
+                        <select id="borrowHouse" class="w-full px-3 py-2 border border-emerald-300 rounded-xl text-sm bg-white">
                             <option value="Nhà 1">Nhà 1</option><option value="Nhà 2">Nhà 2</option><option value="Nhà 3">Nhà 3</option>
                             <option value="Nhà 4">Nhà 4</option><option value="Nhà 5">Nhà 5</option><option value="Nhà 6">Nhà 6</option>
                             <option value="Nhà 7">Nhà 7</option><option value="Nhà 8">Nhà 8</option><option value="Nhà 9">Nhà 9</option>
                         </select>
-                        <input type="text" id="newUnit" placeholder="Tên đơn vị" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
                     </div>
-                    <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition text-sm">Lưu Sách</button>
+                    <div>
+                        <label class="block text-xs font-semibold text-emerald-800 mb-1">Mã sách / Barcode:</label>
+                        <input type="text" id="borrowCode" required placeholder="VD: S001" class="w-full px-3 py-2 border border-emerald-300 rounded-xl text-sm bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-emerald-800 mb-1">Tên người mượn:</label>
+                        <input type="text" id="borrowName" required placeholder="Họ tên người mượn" class="w-full px-3 py-2 border border-emerald-300 rounded-xl text-sm bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-emerald-800 mb-1">Tên cuốn sách:</label>
+                        <input type="text" id="borrowBookTitle" required placeholder="Tên sách" class="w-full px-3 py-2 border border-emerald-300 rounded-xl text-sm bg-white">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full py-2 bg-emerald-700 text-white font-semibold rounded-xl hover:bg-emerald-800 transition text-sm">Xác Nhận Mượn</button>
+                    </div>
                 </form>
+
+                <!-- Bộ lọc chọn xem nhà cuối tháng -->
+                <div class="pt-3 border-t border-emerald-200 flex flex-col md:flex-row justify-between items-center gap-3">
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <span class="text-xs font-bold text-emerald-900">Xem thống kê mượn/trả theo nhà:</span>
+                        <select id="filterHouse" onchange="renderHouseData()" class="px-3 py-1.5 border border-emerald-300 rounded-xl text-sm bg-white font-semibold text-emerald-800">
+                            <option value="Tất cả">Tất cả 9 Nhà</option>
+                            <option value="Nhà 1">Nhà 1</option><option value="Nhà 2">Nhà 2</option><option value="Nhà 3">Nhà 3</option>
+                            <option value="Nhà 4">Nhà 4</option><option value="Nhà 5">Nhà 5</option><option value="Nhà 6">Nhà 6</option>
+                            <option value="Nhà 7">Nhà 7</option><option value="Nhà 8">Nhà 8</option><option value="Nhà 9">Nhà 9</option>
+                        </select>
+                    </div>
+                    <span id="houseStats" class="text-xs font-bold text-emerald-800 bg-emerald-200/60 px-3 py-1.5 rounded-lg"></span>
+                </div>
+
+                <!-- Bảng hiển thị 9 Nhà -->
+                <div class="overflow-x-auto bg-white rounded-xl border border-emerald-200">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-emerald-100 text-emerald-900 text-xs uppercase tracking-wider">
+                                <th class="p-3">Nhà</th>
+                                <th class="p-3">Mã Sách</th>
+                                <th class="p-3">Tên Sách</th>
+                                <th class="p-3">Người Mượn</th>
+                                <th class="p-3">Trạng Thái (Đã trả / Chưa trả)</th>
+                                <th class="p-3">Thao tác đổi trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="houseTableBody" class="divide-y divide-emerald-100"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
+
+
+        <!-- ================= Ô BỰ 2: DANH SÁCH THÁNG 9/2026 & THÁNG 11/2025 (MÀU XANH DƯƠNG) ================= -->
+        <section id="block-months" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-blue-500 space-y-6">
+            <div class="bg-blue-600 text-white p-4 rounded-2xl flex justify-between items-center">
+                <h2 class="text-lg font-bold">📅 Ô 2: Danh Sách Truyện Tháng 11/2025 & Tháng 9/2026</h2>
+                <span class="text-xs bg-blue-800 px-3 py-1 rounded-full font-semibold">Chủ đạo Xanh Dương</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Tháng 11/2025 -->
+                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-200 space-y-3">
+                    <h3 class="font-bold text-blue-900 text-sm">📘 Tháng 11/2025</h3>
+                    <div class="flex gap-2">
+                        <input type="file" id="fileThang11" accept=".xlsx, .xls, .csv" class="flex-1 p-2 border border-blue-300 rounded-xl text-xs bg-white">
+                        <button type="button" onclick="uploadMonth('thang11')" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-xl text-xs hover:bg-blue-700">Nạp File</button>
+                    </div>
+                    <input type="text" id="searchThang11" oninput="filterMonthData('thang11')" placeholder="Tìm tên sách, mã sách Tháng 11..." class="w-full px-3 py-2 border border-blue-300 rounded-xl text-xs bg-white">
+                    <div class="overflow-x-auto bg-white rounded-xl border border-blue-200 max-h-60 overflow-y-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead><tr class="bg-blue-100 text-blue-900"><th class="p-2">Mã</th><th class="p-2">Tên Sách</th><th class="p-2">Số thẻ</th></tr></thead>
+                            <tbody id="tableThang11Body" class="divide-y divide-blue-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tháng 9/2026 -->
+                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-200 space-y-3">
+                    <h3 class="font-bold text-blue-900 text-sm">📗 Tháng 9/2026</h3>
+                    <div class="flex gap-2">
+                        <input type="file" id="fileThang9" accept=".xlsx, .xls, .csv" class="flex-1 p-2 border border-blue-300 rounded-xl text-xs bg-white">
+                        <button type="button" onclick="uploadMonth('thang9')" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-xl text-xs hover:bg-blue-700">Nạp File</button>
+                    </div>
+                    <input type="text" id="searchThang9" oninput="filterMonthData('thang9')" placeholder="Tìm tên sách, mã sách Tháng 9..." class="w-full px-3 py-2 border border-blue-300 rounded-xl text-xs bg-white">
+                    <div class="overflow-x-auto bg-white rounded-xl border border-blue-200 max-h-60 overflow-y-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead><tr class="bg-blue-100 text-blue-900"><th class="p-2">Mã</th><th class="p-2">Tên Sách</th><th class="p-2">Số thẻ</th></tr></thead>
+                            <tbody id="tableThang9Body" class="divide-y divide-blue-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= Ô BỰ 3: BẢNG BÁO CÁO (MÀU CAM/VÀNG) ================= -->
+        <section id="block-report" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-amber-500 space-y-6">
+            <div class="bg-amber-600 text-white p-4 rounded-2xl flex justify-between items-center">
+                <h2 class="text-lg font-bold">📊 Ô 3: Bảng Báo Cáo Tháng (Hình Ảnh & Nội Dung Ghi Chú)</h2>
+                <span class="text-xs bg-amber-800 px-3 py-1 rounded-full font-semibold">Chủ đạo Cam/Vàng</span>
+            </div>
+
+            <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">Tải lên hình ảnh báo cáo:</label>
+                    <input type="file" id="reportImg" accept="image/*" class="w-full p-2 border border-amber-300 rounded-xl text-xs bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">Nội dung ghi chú báo cáo:</label>
+                    <input type="text" id="reportContent" placeholder="Nhập chi tiết nội dung báo cáo..." class="w-full px-3 py-2 border border-amber-300 rounded-xl text-sm bg-white">
+                </div>
+                <div>
+                    <button type="button" onclick="saveReport()" class="w-full py-2 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition text-sm">Lưu Báo Cáo Mới</button>
+                </div>
+            </div>
+
+            <!-- Khu vực hiển thị danh sách báo cáo -->
+            <div id="reportContainer" class="space-y-4"></div>
+        </section>
+
+
+        <!-- ================= Ô BỰ 4: NHẬT KÝ TRUY CẬP CỦA NHÂN VIÊN / TRUNG TÂM Y TẾ (MÀU TÍM/HỒNG) ================= -->
+        <section id="block-logs" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-purple-500 space-y-6">
+            <div class="bg-purple-700 text-white p-4 rounded-2xl flex justify-between items-center">
+                <h2 class="text-lg font-bold">👤 Ô 4: Nhật Ký Hoạt Động Nhân Viên / Trung Tâm Y Tế</h2>
+                <span class="text-xs bg-purple-900 px-3 py-1 rounded-full font-semibold">Chủ đạo Tím/Hồng</span>
+            </div>
+
+            <div class="bg-purple-50 p-4 rounded-2xl border border-purple-200 space-y-4">
+                <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+                    <p class="text-xs text-purple-900">Mỗi khi nhân viên hoặc y tế truy cập hoặc thực hiện thao tác trên trang web, hệ thống sẽ tự động ghi nhận nhật ký hành động kèm Gmail/Tên xác thực.</p>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <input type="text" id="staffEmail" placeholder="Nhập Gmail nhân viên / y tế..." class="px-3 py-2 border border-purple-300 rounded-xl text-xs bg-white flex-1">
+                        <button type="button" onclick="logStaffAction('Truy cập xem hệ thống')" class="px-4 py-2 bg-purple-700 text-white font-semibold rounded-xl text-xs hover:bg-purple-800 whitespace-nowrap">Ghi Nhận Truy Cập</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto bg-white rounded-xl border border-purple-200">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-purple-100 text-purple-900 uppercase tracking-wider">
+                                <th class="p-3">Thời gian</th>
+                                <th class="p-3">Gmail / Nhân viên / Y tế</th>
+                                <th class="p-3">Hành động thực hiện</th>
+                                <th class="p-3">Trạng thái ghi chú</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody" class="divide-y divide-purple-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
     </div>
 
-    <!-- JavaScript Xử Lý Toàn Bộ -->
+    <!-- JavaScript Xử Lý Toàn Bộ Hệ Thống -->
     <script>
-        let books = JSON.parse(localStorage.getItem('library_books')) || [
-            { code: "S001", sdkcb: "KCB-01", title: "Mắt Biếc", category: "Tiểu thuyết", center: "Nhà 1", unit: "Đơn vị A", price: "50,000đ", status: "available", borrower: "", cardId: "" }
+        // Khởi tạo dữ liệu từ LocalStorage
+        let libraryBooks = JSON.parse(localStorage.getItem('lib_books')) || [];
+        let houseBorrowList = JSON.parse(localStorage.getItem('house_borrows')) || [
+            { house: "Nhà 1", code: "S001", title: "Mắt Biếc", borrower: "Nguyễn Văn A", status: "Chưa trả" }
+        ];
+        let listThang11 = JSON.parse(localStorage.getItem('data_thang11')) || [];
+        let listThang9 = JSON.parse(localStorage.getItem('data_thang9')) || [];
+        let reports = JSON.parse(localStorage.getItem('lib_reports')) || [];
+        let staffLogs = JSON.parse(localStorage.getItem('staff_logs')) || [
+            { time: new Date().toLocaleString('vi-VN'), email: "nhanvien.yt@tanhiep.gov", action: "Truy cập hệ thống", note: "Đã tự động ghi nhận" }
         ];
 
-        let listThang9 = JSON.parse(localStorage.getItem('library_thang9')) || [];
-        let listThang11 = JSON.parse(localStorage.getItem('library_thang11')) || [];
-
         function saveData() {
-            localStorage.setItem('library_books', JSON.stringify(books));
-            localStorage.setItem('library_thang9', JSON.stringify(listThang9));
-            localStorage.setItem('library_thang11', JSON.stringify(listThang11));
+            localStorage.setItem('lib_books', JSON.stringify(libraryBooks));
+            localStorage.setItem('house_borrows', JSON.stringify(houseBorrowList));
+            localStorage.setItem('data_thang11', JSON.stringify(listThang11));
+            localStorage.setItem('data_thang9', JSON.stringify(listThang9));
+            localStorage.setItem('lib_reports', JSON.stringify(reports));
+            localStorage.setItem('staff_logs', JSON.stringify(staffLogs));
         }
 
-        function renderBooks(list) {
-            const tbody = document.getElementById('bookTableBody');
-            const countEl = document.getElementById('totalBooksCount');
-            if (countEl) countEl.innerText = `Tổng số: ${list.length} cuốn`;
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Không tìm thấy sách nào.</td></tr>`;
-                return;
-            }
-
-            list.forEach(book => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
-                tr.innerHTML = `
-                    <td class="p-3 font-mono font-medium text-indigo-600">${book.code || '-'}</td>
-                    <td class="p-3 text-slate-600">${book.sdkcb || '<span class="text-slate-300">Trống</span>'}</td>
-                    <td class="p-3 font-semibold text-slate-800">${book.title || '-'}</td>
-                    <td class="p-3 text-slate-600">${book.category || '-'}</td>
-                    <td class="p-3 text-slate-600">${book.center || '-'} <span class="text-xs text-slate-400 block">(${book.unit || ''})</span></td>
-                    <td class="p-3 text-slate-600">${book.price || '-'}</td>
-                    <td class="p-3">
-                        ${book.status === 'available' 
-                            ? '<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-semibold">Có sẵn</span>' 
-                            : '<span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-xs font-semibold">Đang mượn</span>'}
-                    </td>
-                    <td class="p-3 text-sm text-slate-600">
-                        ${book.status === 'borrowed' ? `<b class="text-slate-800">${book.borrower}</b><br><span class="text-xs text-slate-400">Thẻ: ${book.cardId}</span>` : '<span class="text-slate-400">-</span>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function renderMonthTable(monthKey, list) {
-            const tbody = document.getElementById(monthKey === 'thang9' ? 'tableThang9Body' : 'tableThang11Body');
-            const countElem = document.getElementById(monthKey === 'thang9' ? 'countThang9' : 'countThang11');
-            if (countElem) countElem.innerText = `${list.length} cuốn`;
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">Chưa có dữ liệu. Vui lòng chọn file Excel và bấm "Nạp Bảng"!</td></tr>`;
-                return;
-            }
-
-            list.forEach(book => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
-                tr.innerHTML = `
-                    <td class="p-3 font-mono font-medium text-indigo-600">${book.code || '-'}</td>
-                    <td class="p-3 text-slate-600">${book.sdkcb || '-'}</td>
-                    <td class="p-3 font-semibold text-slate-800">${book.title || '-'}</td>
-                    <td class="p-3 text-slate-600">${book.category || '-'}</td>
-                    <td class="p-3 text-slate-600">${book.center || '-'} <span class="text-xs text-slate-400 block">(${book.unit || ''})</span></td>
-                    <td class="p-3 text-slate-600">${book.price || '-'}</td>
-                    <td class="p-3 text-slate-600">${book.sothe ? `<b class="text-slate-800">Thẻ: ${book.sothe}</b>` : '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function uploadMonthExcel(monthKey) {
-            const inputId = monthKey === 'thang9' ? 'excelFileThang9' : 'excelFileThang11';
-            const fileInput = document.getElementById(inputId);
-            if (!fileInput || fileInput.files.length === 0) {
-                alert("Vui lòng chọn file Excel trước!");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-                    if (jsonRows.length === 0) {
-                        alert("File Excel trống!");
-                        return;
-                    }
-
-                    let parsedList = [];
-                    jsonRows.forEach(row => {
-                        const code = String(row['Barcode'] || row['barcode'] || row['Mã sách'] || '').trim();
-                        const sdkcb = String(row['SĐKCB'] || row['sdkcb'] || '').trim();
-                        const title = String(row['Tên sách'] || row['tensach'] || '').trim();
-                        const category = String(row['Môn loại'] || row['monloai'] || '').trim();
-                        const price = String(row['Giá tiền'] || row['giatien'] || '').trim();
-                        const unit = String(row['Tên đơn vị'] || row['donvi'] || '').trim();
-                        const center = String(row['Nhà'] || row['nha'] || 'Nhà 1').trim();
-                        const sothe = String(row['Số thẻ'] || row['sothe'] || '').trim();
-
-                        if (code || title) {
-                            parsedList.push({ code, sdkcb, title, category, price, unit, center, sothe });
-                        }
-                    });
-
-                    if (monthKey === 'thang9') listThang9 = parsedList;
-                    if (monthKey === 'thang11') listThang11 = parsedList;
-
-                    saveData();
-                    alert(`Nạp thành công ${parsedList.length} cuốn sách cho ${monthKey === 'thang9' ? 'Tháng 9' : 'Tháng 11'}!`);
-                    renderMonthTable(monthKey, parsedList);
-                } catch (err) {
-                    console.error(err);
-                    alert("Lỗi đọc file Excel!");
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        function filterMonth(monthKey) {
-            const inputId = monthKey === 'thang9' ? 'searchThang9Input' : 'searchThang11Input';
-            const inputEl = document.getElementById(inputId);
-            const keyword = inputEl ? inputEl.value.toLowerCase().trim() : '';
-            const sourceList = monthKey === 'thang9' ? listThang9 : listThang11;
-
-            if (!keyword) {
-                renderMonthTable(monthKey, sourceList);
-                return;
-            }
-
-            const filtered = sourceList.filter(b => 
-                (b.code && String(b.code).toLowerCase().includes(keyword)) ||
-                (b.title && String(b.title).toLowerCase().includes(keyword)) ||
-                (b.sdkcb && String(b.sdkcb).toLowerCase().includes(keyword)) ||
-                (b.sothe && String(b.sothe).toLowerCase().includes(keyword))
-            );
-
-            renderMonthTable(monthKey, filtered);
-        }
-
-        function searchBooks() {
-            const inputEl = document.getElementById('searchInput');
-            const keyword = inputEl ? inputEl.value.toLowerCase().trim() : '';
-            if (!keyword) {
-                renderBooks(books);
-                return;
-            }
-            const filtered = books.filter(b => 
-                (b.code && String(b.code).toLowerCase().includes(keyword)) || 
-                (b.sdkcb && String(b.sdkcb).toLowerCase().includes(keyword)) || 
-                (b.title && String(b.title).toLowerCase().includes(keyword))
-            );
-            renderBooks(filtered);
-        }
-
-        function handleBorrow(e) {
-            e.preventDefault();
-            const code = document.getElementById('borrowBookCode').value.trim();
-            const cardId = document.getElementById('borrowCardId').value.trim();
-            const name = document.getElementById('borrowerName').value.trim();
-
-            const book = books.find(b => b.code && String(b.code).toLowerCase() === code.toLowerCase());
-            if (!book) { alert("Không tìm thấy mã sách trong kho!"); return; }
-            if (book.status === 'borrowed') { alert(`Sách đang được mượn bởi: ${book.borrower}`); return; }
-
-            book.status = 'borrowed';
-            book.borrower = name;
-            book.cardId = cardId;
-            saveData();
-
-            alert(`Mượn thành công sách: ${book.title}`);
-            document.getElementById('borrowForm').reset();
-            renderBooks(books);
-        }
-
-        function handleReturn(e) {
-            e.preventDefault();
-            const code = document.getElementById('returnBookCode').value.trim();
-
-            const book = books.find(b => b.code && String(b.code).toLowerCase() === code.toLowerCase());
-            if (!book) { alert("Không tìm thấy mã sách!"); return; }
-
-            book.status = 'available';
-            book.borrower = "";
-            book.cardId = "";
-            saveData();
-
-            alert(`Đã trả sách thành công: ${book.title}`);
-            document.getElementById('returnForm').reset();
-            renderBooks(books);
-        }
-
+        // --- Ô 1: THƯ VIỆN & 9 NHÀ ---
         function handleAddBook(e) {
             e.preventDefault();
             const code = document.getElementById('newCode').value.trim();
-            const sdkcb = document.getElementById('newSdkcb').value.trim();
             const title = document.getElementById('newTitle').value.trim();
-            const category = document.getElementById('newCategory').value;
-            const price = document.getElementById('newPrice').value;
             const center = document.getElementById('newCenter').value;
-            const unit = document.getElementById('newUnit').value;
+            const price = document.getElementById('newPrice').value;
 
-            books.push({ code, sdkcb, title, category, price, center, unit, status: 'available', borrower: "", cardId: "" });
+            libraryBooks.push({ code, title, center, price });
             saveData();
-
-            alert("Thêm sách thành công!");
+            alert("Thêm sách vào kho thành công!");
             document.getElementById('addBookForm').reset();
-            renderBooks(books);
+            logStaffAction("Thêm lẻ sách mới: " + title);
         }
 
         function handleExcelUpload() {
             const fileInput = document.getElementById('excelFile');
-            if (!fileInput || fileInput.files.length === 0) { alert("Vui lòng chọn file Excel!"); return; }
-
-            const file = fileInput.files[0];
+            if (fileInput.files.length === 0) { alert("Vui lòng chọn file Excel!"); return; }
             const reader = new FileReader();
-
             reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-                    let countAdded = 0;
-                    jsonRows.forEach(row => {
-                        const code = String(row['Barcode'] || row['barcode'] || row['Mã sách'] || '').trim();
-                        const sdkcb = String(row['SĐKCB'] || row['sdkcb'] || '').trim();
-                        const title = String(row['Tên sách'] || row['tensach'] || '').trim();
-                        const category = String(row['Môn loại'] || row['monloai'] || '').trim();
-                        const price = String(row['Giá tiền'] || row['giatien'] || '').trim();
-                        const unit = String(row['Tên đơn vị'] || row['donvi'] || '').trim();
-                        const center = String(row['Nhà'] || row['nha'] || 'Nhà 1').trim();
-                        const sothe = String(row['Số thẻ'] || row['sothe'] || '').trim();
-
-                        if (code && title) {
-                            books.push({
-                                code, sdkcb, title, category, price, unit,
-                                center: center.includes('Nhà') ? center : 'Nhà 1',
-                                status: sothe ? 'borrowed' : 'available',
-                                borrower: sothe ? 'Đang mượn' : '',
-                                cardId: sothe
-                            });
-                            countAdded++;
-                        }
-                    });
-
-                    saveData();
-                    alert(`Đã nạp thành công ${countAdded} cuốn sách vào kho chung!`);
-                    renderBooks(books);
-                } catch (err) {
-                    alert("Lỗi đọc file Excel!");
-                }
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                
+                let count = 0;
+                jsonRows.forEach(row => {
+                    const code = String(row['Barcode'] || row['Mã sách'] || '').trim();
+                    const title = String(row['Tên sách'] || '').trim();
+                    const center = String(row['Nhà'] || 'Nhà 1').trim();
+                    const price = String(row['Giá tiền'] || '').trim();
+                    if (code || title) {
+                        libraryBooks.push({ code, title, center, price });
+                        count++;
+                    }
+                });
+                saveData();
+                alert(`Đã nạp thành công ${count} cuốn sách vào kho!`);
+                logStaffAction("Nạp Excel kho sách chung (" + count + " cuốn)");
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsArrayBuffer(fileInput.files[0]);
         }
 
-        // Khởi tạo hiển thị dữ liệu ban đầu
-        renderBooks(books);
-        renderMonthTable('thang9/2026', listThang9);
-        renderMonthTable('thang11/2025', listThang11);
+        function handleBorrow(e) {
+            e.preventDefault();
+            const house = document.getElementById('borrowHouse').value;
+            const code = document.getElementById('borrowCode').value.trim();
+            const borrower = document.getElementById('borrowName').value.trim();
+            const title = document.getElementById('borrowBookTitle').value.trim();
+
+            houseBorrowList.push({ house, code, title, borrower, status: "Chưa trả" });
+            saveData();
+            alert(`Đã ghi nhận ${borrower} mượn sách cho ${house}!`);
+            document.getElementById('borrowForm').reset();
+            renderHouseData();
+            logStaffAction(`Cho mượn sách tại ${house} - Sách: ${title}`);
+        }
+
+        function toggleStatus(index) {
+            houseBorrowList[index].status = houseBorrowList[index].status === "Chưa trả" ? "Đã trả" : "Chưa trả";
+            saveData();
+            renderHouseData();
+            logStaffAction(`Cập nhật trạng thái mượn/trả sách tại ${houseBorrowList[index].house}`);
+        }
+
+        function renderHouseData() {
+            const filter = document.getElementById('filterHouse').value;
+            const tbody = document.getElementById('houseTableBody');
+            const stats = document.getElementById('houseStats');
+            tbody.innerHTML = '';
+
+            const filtered = filter === 'Tất cả' ? houseBorrowList : houseBorrowList.filter(item => item.house === filter);
+            
+            let chuaTra = filtered.filter(i => i.status === "Chưa trả").length;
+            let daTra = filtered.filter(i => i.status === "Đã trả").length;
+            stats.innerText = `Tổng mượn: ${filtered.length} | Chưa trả: ${chuaTra} | Đã trả: ${daTra}`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có dữ liệu mượn sách cho ${filter}.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach((item, originalIndex) => {
+                const realIndex = houseBorrowList.indexOf(item);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-emerald-800">${item.house}</td>
+                    <td class="p-3 font-mono">${item.code || '-'}</td>
+                    <td class="p-3 font-semibold">${item.title}</td>
+                    <td class="p-3">${item.borrower}</td>
+                    <td class="p-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-bold ${item.status === 'Đã trả' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${item.status}</span>
+                    </td>
+                    <td class="p-3">
+                        <button type="button" onclick="toggleStatus(${realIndex})" class="px-3 py-1 bg-emerald-700 text-white rounded-lg text-xs hover:bg-emerald-800">Đổi Trạng Thái</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- Ô 2: THÁNG 9 & 11 ---
+        function uploadMonth(monthKey) {
+            const fileInput = document.getElementById(monthKey === 'thang11' ? 'fileThang11' : 'fileThang9');
+            if (fileInput.files.length === 0) { alert("Vui lòng chọn file Excel!"); return; }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                
+                let parsed = [];
+                jsonRows.forEach(row => {
+                    const code = String(row['Barcode'] || row['Mã sách'] || '').trim();
+                    const title = String(row['Tên sách'] || '').trim();
+                    const sothe = String(row['Số thẻ'] || '').trim();
+                    if (code || title) parsed.push({ code, title, sothe });
+                });
+
+                if (monthKey === 'thang11') listThang11 = parsed;
+                else listThang9 = parsed;
+
+                saveData();
+                renderMonthTable(monthKey);
+                alert(`Nạp thành công danh sách ${monthKey === 'thang11' ? 'Tháng 11/2025' : 'Tháng 9/2026'}!`);
+                logStaffAction(`Nạp file Excel danh sách ${monthKey}`);
+            };
+            reader.readAsArrayBuffer(fileInput.files[0]);
+        }
+
+        function renderMonthTable(monthKey, query = '') {
+            const tbodyId = monthKey === 'thang11' ? 'tableThang11Body' : 'tableThang9Body';
+            const source = monthKey === 'thang11' ? listThang11 : listThang9;
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = '';
+
+            const filtered = query ? source.filter(i => i.code.toLowerCase().includes(query) || i.title.toLowerCase().includes(query)) : source;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-slate-400">Không có dữ liệu.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="p-2 font-mono text-blue-800">${item.code}</td><td class="p-2 font-semibold">${item.title}</td><td class="p-2">${item.sothe || '-'}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterMonthData(monthKey) {
+            const query = document.getElementById(monthKey === 'thang11' ? 'searchThang11' : 'searchThang9').value.toLowerCase().trim();
+            renderMonthTable(monthKey, query);
+        }
+
+        // --- Ô 3: BÁO CÁO ẢNH & NỘI DUNG ---
+        function saveReport() {
+            const content = document.getElementById('reportContent').value.trim();
+            const fileInput = document.getElementById('reportImg');
+
+            if (!content && fileInput.files.length === 0) {
+                alert("Vui lòng nhập nội dung hoặc chọn ảnh báo cáo!");
+                return;
+            }
+
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    reports.unshift({ image: e.target.result, content, date: new Date().toLocaleDateString('vi-VN') });
+                    saveData();
+                    renderReports();
+                    document.getElementById('reportContent').value = '';
+                    fileInput.value = '';
+                    alert("Đã lưu báo cáo thành công!");
+                    logStaffAction("Thêm báo cáo tháng kèm hình ảnh");
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                reports.unshift({ image: '', content, date: new Date().toLocaleDateString('vi-VN') });
+                saveData();
+                renderReports();
+                document.getElementById('reportContent').value = '';
+                alert("Đã lưu báo cáo thành công!");
+                logStaffAction("Thêm báo cáo tháng dạng văn bản");
+            }
+        }
+
+        function renderReports() {
+            const container = document.getElementById('reportContainer');
+            container.innerHTML = '';
+            if (reports.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Chưa có báo cáo nào được lưu.</p>`;
+                return;
+            }
+            reports.forEach((rep, idx) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col md:flex-row gap-4 items-center bg-amber-50 p-4 rounded-2xl border border-amber-200";
+                div.innerHTML = `
+                    ${rep.image ? `<img src="${rep.image}" class="w-full md:w-40 h-28 object-cover rounded-xl border border-amber-300 shadow">` : `<div class="w-full md:w-40 h-28 bg-amber-200 rounded-xl flex items-center justify-center text-xs text-amber-800">Không có ảnh</div>`}
+                    <div class="flex-1 space-y-1 w-full">
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-amber-900">Ngày: ${rep.date}</span><button type="button" onclick="deleteReport(${idx})" class="text-xs text-rose-600 font-semibold hover:underline">Xóa</button></div>
+                        <p class="text-xs font-bold text-amber-900">Nội dung báo cáo:</p>
+                        <p class="text-xs text-slate-700 bg-white p-3 rounded-xl border border-amber-200">${rep.content || 'Không có ghi chú'}</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteReport(idx) {
+            if (confirm("Xóa báo cáo này?")) {
+                reports.splice(idx, 1);
+                saveData();
+                renderReports();
+            }
+        }
+
+        // --- Ô 4: NHẬT KÝ NHÂN VIÊN / TRUNG TÂM Y TẾ ---
+        function logStaffAction(action) {
+            const emailInput = document.getElementById('staffEmail');
+            const email = emailInput && emailInput.value.trim() ? emailInput.value.trim() : "nhanvien.yt@tanhiep.gov";
+            staffLogs.unshift({ time: new Date().toLocaleString('vi-VN'), email, action, note: "Đã tự động tick ghi nhận" });
+            saveData();
+            renderLogs();
+        }
+
+        function renderLogs() {
+            const tbody = document.getElementById('logsTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            staffLogs.forEach(log => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 text-purple-900 font-mono">${log.time}</td>
+                    <td class="p-3 font-bold text-purple-800">${log.email}</td>
+                    <td class="p-3 text-slate-700">${log.action}</td>
+                    <td class="p-3"><span class="bg-purple-100 text-purple-800 px-2.5 py-1 rounded-full text-xs font-semibold">✔ ${log.note}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Khởi chạy hệ thống ban đầu
+        renderHouseData();
+        renderMonthTable('thang11');
+        renderMonthTable('thang9');
+        renderReports();
+        renderLogs();
     </script>
 </body>
 </html>
