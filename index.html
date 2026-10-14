@@ -65,7 +65,7 @@
         <div id="tab-thang9" class="hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <h2 class="text-lg font-bold text-indigo-600 mb-2">📌 Danh Sách Sách Tháng 9</h2>
-                <p class="text-xs text-slate-500 mb-4">Tải lên file Excel danh sách Tháng 9 để người dùng dò tìm dữ liệu.</p>
+                <p class="text-xs text-slate-500 mb-4">Tải lên file Excel danh sách Tháng 9 để người dùng dò tìm dữ liệu truyện/sách.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                     <input type="file" id="excelFileThang9" accept=".xlsx, .xls, .csv" class="md:col-span-2 p-2.5 border border-slate-300 rounded-xl text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700">
@@ -106,7 +106,7 @@
         <div id="tab-thang11" class="hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <h2 class="text-lg font-bold text-emerald-600 mb-2">📌 Danh Sách Sách Tháng 11</h2>
-                <p class="text-xs text-slate-500 mb-4">Tải lên file Excel danh sách Tháng 11 để người dùng dò tìm dữ liệu.</p>
+                <p class="text-xs text-slate-500 mb-4">Tải lên file Excel danh sách Tháng 11 để người dùng dò tìm dữ liệu truyện/sách.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                     <input type="file" id="excelFileThang11" accept=".xlsx, .xls, .csv" class="md:col-span-2 p-2.5 border border-slate-300 rounded-xl text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700">
@@ -218,7 +218,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Xử Lý Toàn Bộ -->
+    <!-- JavaScript Xử Lý Hoàn Chỉnh -->
     <script>
         let books = JSON.parse(localStorage.getItem('library_books')) || [
             { code: "S001", sdkcb: "KCB-01", title: "Mắt Biếc", category: "Tiểu thuyết", center: "Nhà 1", unit: "Đơn vị A", price: "50,000đ", status: "available", borrower: "", cardId: "" }
@@ -236,13 +236,15 @@
         function switchTab(tabName) {
             const tabs = ['search', 'thang9', 'thang11', 'borrow', 'manage'];
             tabs.forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                const btn = document.getElementById(`btn-tab-${t}`);
-                if (btn) btn.className = "px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition";
+                const tabEl = document.getElementById(`tab-${t}`);
+                const btnEl = document.getElementById(`btn-tab-${t}`);
+                if (tabEl) tabEl.classList.add('hidden');
+                if (btnEl) btnEl.className = "px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition";
             });
 
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${tabName}`);
             const activeBtn = document.getElementById(`btn-tab-${tabName}`);
+            if (activeTab) activeTab.classList.remove('hidden');
             if (activeBtn) activeBtn.className = "px-3 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow text-sm transition";
 
             if (tabName === 'search') renderBooks(books);
@@ -252,7 +254,9 @@
 
         function renderBooks(list) {
             const tbody = document.getElementById('bookTableBody');
-            document.getElementById('totalBooksCount').innerText = `Tổng số: ${list.length} cuốn`;
+            const countElem = document.getElementById('totalBooksCount');
+            if (countElem) countElem.innerText = `Tổng số: ${list.length} cuốn`;
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             if (list.length === 0) {
@@ -276,81 +280,4 @@
                             : '<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full text-xs font-semibold">Đang mượn</span>'}
                     </td>
                     <td class="p-4 text-sm text-slate-600">
-                        ${book.status === 'borrowed' ? `<b class="text-slate-800">${book.borrower}</b><br><span class="text-xs text-slate-400">Thẻ: ${book.cardId}</span>` : '<span class="text-slate-400">-</span>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function renderMonthTable(monthKey, list) {
-            const tbody = document.getElementById(monthKey === 'thang9' ? 'tableThang9Body' : 'tableThang11Body');
-            const countElem = document.getElementById(monthKey === 'thang9' ? 'countThang9' : 'countThang11');
-            countElem.innerText = `${list.length} cuốn`;
-            tbody.innerHTML = '';
-
-            if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">Chưa có dữ liệu danh sách ${monthKey === 'thang9' ? 'Tháng 9' : 'Tháng 11'}. Hãy bấm "Nạp Bảng" ở trên!</td></tr>`;
-                return;
-            }
-
-            list.forEach(book => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
-                tr.innerHTML = `
-                    <td class="p-4 font-mono font-medium text-indigo-600">${book.code || '-'}</td>
-                    <td class="p-4 text-slate-600">${book.sdkcb || '-'}</td>
-                    <td class="p-4 font-semibold text-slate-800">${book.title || '-'}</td>
-                    <td class="p-4 text-slate-600">${book.category || '-'}</td>
-                    <td class="p-4 text-slate-600">${book.center || '-'} <span class="text-xs text-slate-400 block">(${book.unit || ''})</span></td>
-                    <td class="p-4 text-slate-600">${book.price || '-'}</td>
-                    <td class="p-4 text-slate-600">${book.sothe ? `<b class="text-slate-800">Thẻ: ${book.sothe}</b>` : '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function handleExcelUploadMonth(monthKey) {
-            const inputId = monthKey === 'thang9' ? 'excelFileThang9' : 'excelFileThang11';
-            const fileInput = document.getElementById(inputId);
-            if (fileInput.files.length === 0) {
-                alert("Vui lòng chọn một file Excel trước!");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-                    if (jsonRows.length === 0) {
-                        alert("File Excel trống hoặc không đọc được dữ liệu!");
-                        return;
-                    }
-
-                    let parsedList = [];
-                    jsonRows.forEach(row => {
-                        const code = String(row['Barcode'] || row['barcode'] || row['Mã sách'] || row['ma_sach'] || '').trim();
-                        const sdkcb = String(row['SĐKCB'] || row['sdkcb'] || row['SDKCB'] || '').trim();
-                        const title = String(row['Tên sách'] || row['tensach'] || row['Ten sach'] || '').trim();
-                        const category = String(row['Môn loại'] || row['monloai'] || '').trim();
-                        const price = String(row['Giá tiền'] || row['giatien'] || '').trim();
-                        const unit = String(row['Tên đơn vị'] || row['donvi'] || row['Đơn vị'] || '').trim();
-                        const center = String(row['Nhà'] || row['nha'] || 'Nhà 1').trim();
-                        const sothe = String(row['Số thẻ'] || row['sothe'] || '').trim();
-
-                        if (code || title) {
-                            parsedList.push({ code, sdkcb, title, category, price, unit, center, sothe });
-                        }
-                    });
-
-                    if (monthKey === 'thang9') listThang9 = parsedList;
-                    if (monthKey === 'thang11') listThang11 = parsedList;
-
-                    saveToStorage();
-                    alert(`Đã nạp thành
+                        ${book.status === 'borrowed' ? `<b class="text-slate-800">${book.borrower}</b><br><span class="text-xs text-slate-400">Thẻ: ${
