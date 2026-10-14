@@ -3,375 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Lý Thư Viện 9 Nhà</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Thư viện đọc file Excel SheetJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans">
-
-    <div class="max-w-6xl mx-auto p-4 md:p-6">
-        <!-- Header -->
-        <header class="bg-indigo-600 text-white p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold">📚 Thư viện sách nhà văn hóa TTBTXH Tân Hiệp</h1>
-    
-            </div>
-            <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
-                <button onclick="switchTab('search')" id="btn-tab-search" class="px-4 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow transition">Tra cứu sách</button>
-                <button onclick="switchTab('borrow')" id="btn-tab-borrow" class="px-4 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 transition">Ghi nhận Mượn/Trả</button>
-                <button onclick="switchTab('manage')" id="btn-tab-manage" class="px-4 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 transition">Thêm / Nhập Excel</button>
-            </div>
-        </header>
-
-        <!-- TAB 1: TRA CỨU SÁCH -->
-        <div id="tab-search" class="space-y-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Tra cứu nhanh theo Mã sách, Barcode, SĐKCB hoặc Tên sách:</label>
-                <div class="flex gap-2">
-                    <input type="text" id="searchInput" placeholder="Nhập từ khóa (VD: S001, Harry Potter, SĐKCB...)" class="flex-1 px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <button onclick="searchBooks()" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition">Tìm kiếm</button>
-                </div>
-            </div>
-
-            <!-- Kết quả tra cứu / Danh sách -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="p-4 border-b border-slate-100 flex justify-between items-center">
-                    <h2 class="font-bold text-slate-700">Danh sách kết quả</h2>
-                    <span id="totalBooksCount" class="text-xs bg-slate-100 px-3 py-1 rounded-full text-slate-600 font-medium"></span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                                <th class="p-4">Barcode / Mã</th>
-                                <th class="p-4">SĐKCB</th>
-                                <th class="p-4">Tên Sách</th>
-                                <th class="p-4">Môn loại</th>
-                                <th class="p-4">Đơn vị / Nhà</th>
-                                <th class="p-4">Giá tiền</th>
-                                <th class="p-4">Trạng Thái</th>
-                                <th class="p-4">Người Mượn / Số thẻ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bookTableBody" class="divide-y divide-slate-100 text-sm">
-                            <!-- Dữ liệu render bằng JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 2: MƯỢN / TRẢ SÁCH -->
-        <div id="tab-borrow" class="hidden space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Form Mượn Sách -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h2 class="text-lg font-bold text-indigo-600 mb-4">📖 Lập Phiếu Mượn Sách</h2>
-                    <form id="borrowForm" onsubmit="handleBorrow(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-600 mb-1">Mã sách hoặc Barcode cần mượn:</label>
-                            <input type="text" id="borrowBookCode" required placeholder="VD: S001" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-600 mb-1">Số thẻ độc giả / Kí số thẻ:</label>
-                            <input type="text" id="borrowCardId" required placeholder="VD: CARD-2026-001" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-600 mb-1">Họ tên người mượn:</label>
-                            <input type="text" id="borrowerName" required placeholder="VD: Nguyễn Văn A" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <button type="submit" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition">Xác Nhận Cho Mượn</button>
-                    </form>
-                </div>
-
-                <!-- Form Trả Sách -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h2 class="text-lg font-bold text-emerald-600 mb-4">🔄 Trả Sách</h2>
-                    <form id="returnForm" onsubmit="handleReturn(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-600 mb-1">Mã sách hoặc Barcode trả:</label>
-                            <input type="text" id="returnBookCode" required placeholder="VD: S001" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
-                        </div>
-                        <div class="pt-8">
-                            <p class="text-xs text-slate-500 mb-2">* Khi bấm trả sách, hệ thống sẽ tự động cập nhật trạng thái sách về "Có sẵn".</p>
-                            <button type="submit" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition">Xác Nhận Đã Trả Sách</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 3: THÊM SÁCH & IMPORT EXCEL -->
-        <div id="tab-manage" class="hidden space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Import Excel -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h2 class="text-lg font-bold text-emerald-600 mb-2">📁 Tải Lên File Excel Sách</h2>
-                    <p class="text-xs text-slate-500 mb-4">File Excel gồm các cột: <b>Barcode</b>, <b>SĐKCB</b>, <b>Tên sách</b>, <b>Môn loại</b>, <b>Đơn vị</b>, <b>Giá tiền</b>, <b>Nhà</b>, <b>Số thẻ</b>.</p>
-                    <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                    <button onclick="handleExcelUpload()" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition">Nhập Dữ Liệu Từ File Excel</button>
-                </div>
-
-                <!-- Thêm từng cuốn -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h2 class="text-lg font-bold text-indigo-600 mb-4">➕ Thêm Lẻ Một Cuốn Sách</h2>
-                    <form id="addBookForm" onsubmit="handleAddBook(event)" class="space-y-3">
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="newCode" required placeholder="Mã sách / Barcode *" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                            <input type="text" id="newSdkcb" placeholder="SĐKCB (Không bắt buộc)" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                        </div>
-                        <input type="text" id="newTitle" required placeholder="Tên sách *" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="newCategory" placeholder="Môn loại" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                            <input type="text" id="newPrice" placeholder="Giá tiền" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <select id="newCenter" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                                <option value="Nhà 1">Nhà 1</option><option value="Nhà 2">Nhà 2</option><option value="Nhà 3">Nhà 3</option>
-                                <option value="Nhà 4">Nhà 4</option><option value="Nhà 5">Nhà 5</option><option value="Nhà 6">Nhà 6</option>
-                                <option value="Nhà 7">Nhà 7</option><option value="Nhà 8">Nhà 8</option><option value="Nhà 9">Nhà 9</option>
-                            </select>
-                            <input type="text" id="newUnit" placeholder="Tên đơn vị" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
-                        </div>
-                        <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition text-sm">Lưu Sách</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Xử Lý Toàn Bộ -->
-    <script>
-        let books = JSON.parse(localStorage.getItem('library_books')) || [
-            { code: "S001", sdkcb: "KCB-01", title: "Mắt Biếc", category: "Tiểu thuyết", center: "Nhà 1", unit: "Đơn vị A", price: "50,000đ", status: "available", borrower: "", cardId: "" },
-            { code: "S002", sdkcb: "", title: "Doraemon Tập 1", category: "Truyện tranh", center: "Nhà 2", unit: "Đơn vị B", price: "20,000đ", status: "borrowed", borrower: "Nguyễn Văn A", cardId: "CARD-101" }
-        ];
-
-        function saveToStorage() {
-            localStorage.setItem('library_books', JSON.stringify(books));
-        }
-
-        function switchTab(tabName) {
-            document.getElementById('tab-search').classList.add('hidden');
-            document.getElementById('tab-borrow').classList.add('hidden');
-            document.getElementById('tab-manage').classList.add('hidden');
-
-            document.getElementById('btn-tab-search').className = "px-4 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 transition";
-            document.getElementById('btn-tab-borrow').className = "px-4 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 transition";
-            document.getElementById('btn-tab-manage').className = "px-4 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 transition";
-
-            if (tabName === 'search') {
-                document.getElementById('tab-search').classList.remove('hidden');
-                document.getElementById('btn-tab-search').className = "px-4 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow transition";
-                renderBooks(books);
-            } else if (tabName === 'borrow') {
-                document.getElementById('tab-borrow').classList.remove('hidden');
-                document.getElementById('btn-tab-borrow').className = "px-4 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow transition";
-            } else if (tabName === 'manage') {
-                document.getElementById('tab-manage').classList.remove('hidden');
-                document.getElementById('btn-tab-manage').className = "px-4 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow transition";
-            }
-        }
-
-        function renderBooks(list) {
-            const tbody = document.getElementById('bookTableBody');
-            document.getElementById('totalBooksCount').innerText = `Tổng số: ${list.length} cuốn`;
-            tbody.innerHTML = '';
-
-            if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Không tìm thấy cuốn sách nào.</td></tr>`;
-                return;
-            }
-
-            list.forEach(book => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
-                tr.innerHTML = `
-                    <td class="p-4 font-mono font-medium text-indigo-600">${book.code || '-'}</td>
-                    <td class="p-4 text-slate-600">${book.sdkcb ? book.sdkcb : '<span class="text-slate-300 italic">Trống</span>'}</td>
-                    <td class="p-4 font-semibold text-slate-800">${book.title || '-'}</td>
-                    <td class="p-4 text-slate-600">${book.category || '-'}</td>
-                    <td class="p-4 text-slate-600">${book.center || '-'} <span class="text-xs text-slate-400 block">(${book.unit || ''})</span></td>
-                    <td class="p-4 text-slate-600">${book.price || '-'}</td>
-                    <td class="p-4">
-                        ${book.status === 'available' 
-                            ? '<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full text-xs font-semibold">Có sẵn</span>' 
-                            : '<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full text-xs font-semibold">Đang mượn</span>'}
-                    </td>
-                    <td class="p-4 text-sm text-slate-600">
-                        ${book.status === 'borrowed' ? `<b class="text-slate-800">${book.borrower}</b><br><span class="text-xs text-slate-400">Thẻ: ${book.cardId}</span>` : '<span class="text-slate-400">-</span>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function searchBooks() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (!keyword) {
-                renderBooks(books);
-                return;
-            }
-            const filtered = books.filter(b => 
-                (b.code && String(b.code).toLowerCase().includes(keyword)) || 
-                (b.sdkcb && String(b.sdkcb).toLowerCase().includes(keyword)) || 
-                (b.title && String(b.title).toLowerCase().includes(keyword))
-            );
-            renderBooks(filtered);
-        }
-
-        function handleBorrow(e) {
-            e.preventDefault();
-            const code = document.getElementById('borrowBookCode').value.trim();
-            const cardId = document.getElementById('borrowCardId').value.trim();
-            const name = document.getElementById('borrowerName').value.trim();
-
-            const book = books.find(b => b.code && String(b.code).toLowerCase() === code.toLowerCase());
-            if (!book) {
-                alert("Không tìm thấy mã sách này trong hệ thống!");
-                return;
-            }
-            if (book.status === 'borrowed') {
-                alert(`Sách này hiện đang được mượn bởi: ${book.borrower}`);
-                return;
-            }
-
-            book.status = 'borrowed';
-            book.borrower = name;
-            book.cardId = cardId;
-            saveToStorage();
-
-            alert(`Đã lập phiếu mượn thành công cho sách: ${book.title}`);
-            document.getElementById('borrowForm').reset();
-            switchTab('search');
-        }
-
-        function handleReturn(e) {
-            e.preventDefault();
-            const code = document.getElementById('returnBookCode').value.trim();
-
-            const book = books.find(b => b.code && String(b.code).toLowerCase() === code.toLowerCase());
-            if (!book) {
-                alert("Không tìm thấy mã sách này!");
-                return;
-            }
-            if (book.status === 'available') {
-                alert("Cuốn sách này hiện không có ai mượn (đang ở thư viện).");
-                return;
-            }
-
-            book.status = 'available';
-            book.borrower = "";
-            book.cardId = "";
-            saveToStorage();
-
-            alert(`Đã nhận trả sách thành công: ${book.title}`);
-            document.getElementById('returnForm').reset();
-            switchTab('search');
-        }
-
-        function handleAddBook(e) {
-            e.preventDefault();
-            const code = document.getElementById('newCode').value.trim();
-            const sdkcb = document.getElementById('newSdkcb').value.trim();
-            const title = document.getElementById('newTitle').value.trim();
-            const category = document.getElementById('newCategory').value;
-            const price = document.getElementById('newPrice').value;
-            const center = document.getElementById('newCenter').value;
-            const unit = document.getElementById('newUnit').value;
-
-            if (books.some(b => b.code && String(b.code).toLowerCase() === code.toLowerCase())) {
-                alert("Mã sách hoặc Barcode này đã tồn tại!");
-                return;
-            }
-
-            books.push({ code, sdkcb, title, category, price, center, unit, status: 'available', borrower: "", cardId: "" });
-            saveToStorage();
-
-            alert("Thêm sách mới thành công!");
-            document.getElementById('addBookForm').reset();
-            switchTab('search');
-        }
-
-        function handleExcelUpload() {
-            const fileInput = document.getElementById('excelFile');
-            if (fileInput.files.length === 0) {
-                alert("Vui lòng chọn một file Excel trước!");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-                    if (jsonRows.length === 0) {
-                        alert("File Excel trống hoặc không đọc được dữ liệu!");
-                        return;
-                    }
-
-                    let countAdded = 0;
-                    jsonRows.forEach(row => {
-                        const code = String(row['Barcode'] || row['barcode'] || row['Mã sách'] || row['ma_sach'] || row['Ma sach'] || '').trim();
-                        const sdkcb = String(row['SĐKCB'] || row['sdkcb'] || row['SDKCB'] || row['Số ĐKCB'] || '').trim();
-                        const title = String(row['Tên sách'] || row['tensach'] || row['Ten sach'] || row['Book Name'] || '').trim();
-                        const category = String(row['Môn loại'] || row['monloai'] || row['Mon loai'] || row['The loai'] || '').trim();
-                        const price = String(row['Giá tiền'] || row['giatien'] || row['Gia tien'] || row['Price'] || '').trim();
-                        const unit = String(row['Tên đơn vị'] || row['donvi'] || row['Don vi'] || row['Đơn vị'] || '').trim();
-                        const center = String(row['Nhà'] || row['nha'] || row['Trung tâm'] || row['trungtam'] || 'Nhà 1').trim();
-                        const sothe = String(row['Số thẻ'] || row['sothe'] || row['So the'] || '').trim();
-
-                        if (code && title) {
-                            const existing = books.find(b => String(b.code).toLowerCase() === code.toLowerCase());
-                            if (!existing) {
-                                books.push({
-                                    code: code,
-                                    sdkcb: sdkcb,
-                                    title: title,
-                                    category: category,
-                                    price: price,
-                                    unit: unit,
-                                    center: center.includes('Nhà') ? center : 'Nhà 1',
-                                    status: sothe ? 'borrowed' : 'available',
-                                    borrower: sothe ? 'Đang mượn' : '',
-                                    cardId: sothe
-                                });
-                                countAdded++;
-                            }
-                        }
-                    });
-
-                    saveToStorage();
-                    alert(`Đã nhập thành công ${countAdded} cuốn sách từ file Excel lên hệ thống!`);
-                    fileInput.value = "";
-                    switchTab('search');
-                } catch (err) {
-                    console.error(err);
-                    alert("Lỗi khi đọc file Excel. Bạn hãy kiểm tra lại định dạng file nhé!");
-                }
-            };
-
-            reader.readAsArrayBuffer(file);
-        }
-
-        // Chạy hiển thị danh sách ban đầu khi load trang
-        renderBooks(books);
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thư viện sách nhà văn hóa TTBTXH Tân Hiệp</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -382,11 +13,11 @@
 
     <div class="max-w-6xl mx-auto p-4 md:p-6">
         <!-- Header -->
-        <header class="bg-indigo-600 text-white p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row justify-between items-center">
+        <header class="bg-indigo-600 text-white p-6 rounded-2xl shadow-lg mb-6 flex flex-col xl:flex-row justify-between items-center gap-4">
             <div>
                 <h1 class="text-2xl font-bold">📚 Thư viện sách nhà văn hóa TTBTXH Tân Hiệp</h1>
             </div>
-            <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-2 justify-center xl:justify-end">
                 <button onclick="switchTab('search')" id="btn-tab-search" class="px-3 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow text-sm transition">Tra cứu chung</button>
                 <button onclick="switchTab('thang9')" id="btn-tab-thang9" class="px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition">📅 Danh sách Tháng 9</button>
                 <button onclick="switchTab('thang11')" id="btn-tab-thang11" class="px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition">📅 Danh sách Tháng 11</button>
@@ -478,4 +109,248 @@
                 <p class="text-xs text-slate-500 mb-4">Tải lên file Excel danh sách Tháng 11 để người dùng dò tìm dữ liệu.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-                    <input type="file" id="excelFileThang11" accept=".xlsx, .xls, .csv" class="md:col-span-2 p-2.5 border border-slate-300 rounded-xl text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700
+                    <input type="file" id="excelFileThang11" accept=".xlsx, .xls, .csv" class="md:col-span-2 p-2.5 border border-slate-300 rounded-xl text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700">
+                    <button onclick="handleExcelUploadMonth('thang11')" class="py-2.5 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition text-sm">Nạp Bảng Tháng 11</button>
+                </div>
+
+                <div class="flex gap-2">
+                    <input type="text" id="searchThang11Input" placeholder="Dò từ khóa trong Tháng 11..." class="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm">
+                    <button onclick="searchMonth('thang11')" class="px-5 py-2 bg-slate-800 text-white font-medium rounded-xl text-sm">Dò tìm</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-emerald-50/50">
+                    <h3 class="font-bold text-emerald-900 text-sm">Bảng dữ liệu sách Tháng 11</h3>
+                    <span id="countThang11" class="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium">0 cuốn</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                <th class="p-4">Barcode / Mã</th>
+                                <th class="p-4">SĐKCB</th>
+                                <th class="p-4">Tên Sách</th>
+                                <th class="p-4">Môn loại</th>
+                                <th class="p-4">Đơn vị / Nhà</th>
+                                <th class="p-4">Giá tiền</th>
+                                <th class="p-4">Ghi chú / Số thẻ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableThang11Body" class="divide-y divide-slate-100 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: MƯỢN / TRẢ SÁCH -->
+        <div id="tab-borrow" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h2 class="text-lg font-bold text-indigo-600 mb-4">📖 Lập Phiếu Mượn Sách</h2>
+                    <form id="borrowForm" onsubmit="handleBorrow(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Mã sách / Barcode:</label>
+                            <input type="text" id="borrowBookCode" required placeholder="VD: S001" class="w-full px-4 py-2 border border-slate-300 rounded-xl">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Số thẻ độc giả / Kí số thẻ:</label>
+                            <input type="text" id="borrowCardId" required placeholder="VD: CARD-2026-001" class="w-full px-4 py-2 border border-slate-300 rounded-xl">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Họ tên người mượn:</label>
+                            <input type="text" id="borrowerName" required placeholder="VD: Nguyễn Văn A" class="w-full px-4 py-2 border border-slate-300 rounded-xl">
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition">Xác Nhận Cho Mượn</button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h2 class="text-lg font-bold text-emerald-600 mb-4">🔄 Trả Sách</h2>
+                    <form id="returnForm" onsubmit="handleReturn(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Mã sách / Barcode trả:</label>
+                            <input type="text" id="returnBookCode" required placeholder="VD: S001" class="w-full px-4 py-2 border border-slate-300 rounded-xl">
+                        </div>
+                        <div class="pt-8">
+                            <p class="text-xs text-slate-500 mb-2">* Cập nhật trạng thái sách về "Có sẵn".</p>
+                            <button type="submit" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition">Xác Nhận Đã Trả Sách</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: THÊM SÁCH THỦ CÔNG & EXCEL CHUNG -->
+        <div id="tab-manage" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h2 class="text-lg font-bold text-emerald-600 mb-2">📁 Tải Lên Excel Vào Kho Chung</h2>
+                    <p class="text-xs text-slate-500 mb-4">Thêm sách hàng loạt vào kho tra cứu chung.</p>
+                    <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700">
+                    <button onclick="handleExcelUpload()" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition">Nạp Vào Kho Chung</button>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h2 class="text-lg font-bold text-indigo-600 mb-4">➕ Thêm Lẻ Một Cuốn Sách</h2>
+                    <form id="addBookForm" onsubmit="handleAddBook(event)" class="space-y-3">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="newCode" required placeholder="Mã sách / Barcode *" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                            <input type="text" id="newSdkcb" placeholder="SĐKCB" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                        </div>
+                        <input type="text" id="newTitle" required placeholder="Tên sách *" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="newCategory" placeholder="Môn loại" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                            <input type="text" id="newPrice" placeholder="Giá tiền" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="newCenter" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                                <option value="Nhà 1">Nhà 1</option><option value="Nhà 2">Nhà 2</option><option value="Nhà 3">Nhà 3</option>
+                                <option value="Nhà 4">Nhà 4</option><option value="Nhà 5">Nhà 5</option><option value="Nhà 6">Nhà 6</option>
+                                <option value="Nhà 7">Nhà 7</option><option value="Nhà 8">Nhà 8</option><option value="Nhà 9">Nhà 9</option>
+                            </select>
+                            <input type="text" id="newUnit" placeholder="Tên đơn vị" class="px-3 py-2 border border-slate-300 rounded-xl text-sm">
+                        </div>
+                        <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition text-sm">Lưu Sách</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Xử Lý Toàn Bộ -->
+    <script>
+        let books = JSON.parse(localStorage.getItem('library_books')) || [
+            { code: "S001", sdkcb: "KCB-01", title: "Mắt Biếc", category: "Tiểu thuyết", center: "Nhà 1", unit: "Đơn vị A", price: "50,000đ", status: "available", borrower: "", cardId: "" }
+        ];
+
+        let listThang9 = JSON.parse(localStorage.getItem('library_thang9')) || [];
+        let listThang11 = JSON.parse(localStorage.getItem('library_thang11')) || [];
+
+        function saveToStorage() {
+            localStorage.setItem('library_books', JSON.stringify(books));
+            localStorage.setItem('library_thang9', JSON.stringify(listThang9));
+            localStorage.setItem('library_thang11', JSON.stringify(listThang11));
+        }
+
+        function switchTab(tabName) {
+            const tabs = ['search', 'thang9', 'thang11', 'borrow', 'manage'];
+            tabs.forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`btn-tab-${t}`);
+                if (btn) btn.className = "px-3 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-400 text-sm transition";
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-tab-${tabName}`);
+            if (activeBtn) activeBtn.className = "px-3 py-2 bg-white text-indigo-600 font-medium rounded-lg shadow text-sm transition";
+
+            if (tabName === 'search') renderBooks(books);
+            if (tabName === 'thang9') renderMonthTable('thang9', listThang9);
+            if (tabName === 'thang11') renderMonthTable('thang11', listThang11);
+        }
+
+        function renderBooks(list) {
+            const tbody = document.getElementById('bookTableBody');
+            document.getElementById('totalBooksCount').innerText = `Tổng số: ${list.length} cuốn`;
+            tbody.innerHTML = '';
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Không tìm thấy cuốn sách nào.</td></tr>`;
+                return;
+            }
+
+            list.forEach(book => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-medium text-indigo-600">${book.code || '-'}</td>
+                    <td class="p-4 text-slate-600">${book.sdkcb || '<span class="text-slate-300">Trống</span>'}</td>
+                    <td class="p-4 font-semibold text-slate-800">${book.title || '-'}</td>
+                    <td class="p-4 text-slate-600">${book.category || '-'}</td>
+                    <td class="p-4 text-slate-600">${book.center || '-'} <span class="text-xs text-slate-400 block">(${book.unit || ''})</span></td>
+                    <td class="p-4 text-slate-600">${book.price || '-'}</td>
+                    <td class="p-4">
+                        ${book.status === 'available' 
+                            ? '<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full text-xs font-semibold">Có sẵn</span>' 
+                            : '<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full text-xs font-semibold">Đang mượn</span>'}
+                    </td>
+                    <td class="p-4 text-sm text-slate-600">
+                        ${book.status === 'borrowed' ? `<b class="text-slate-800">${book.borrower}</b><br><span class="text-xs text-slate-400">Thẻ: ${book.cardId}</span>` : '<span class="text-slate-400">-</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderMonthTable(monthKey, list) {
+            const tbody = document.getElementById(monthKey === 'thang9' ? 'tableThang9Body' : 'tableThang11Body');
+            const countElem = document.getElementById(monthKey === 'thang9' ? 'countThang9' : 'countThang11');
+            countElem.innerText = `${list.length} cuốn`;
+            tbody.innerHTML = '';
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">Chưa có dữ liệu danh sách ${monthKey === 'thang9' ? 'Tháng 9' : 'Tháng 11'}. Hãy bấm "Nạp Bảng" ở trên!</td></tr>`;
+                return;
+            }
+
+            list.forEach(book => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-medium text-indigo-600">${book.code || '-'}</td>
+                    <td class="p-4 text-slate-600">${book.sdkcb || '-'}</td>
+                    <td class="p-4 font-semibold text-slate-800">${book.title || '-'}</td>
+                    <td class="p-4 text-slate-600">${book.category || '-'}</td>
+                    <td class="p-4 text-slate-600">${book.center || '-'} <span class="text-xs text-slate-400 block">(${book.unit || ''})</span></td>
+                    <td class="p-4 text-slate-600">${book.price || '-'}</td>
+                    <td class="p-4 text-slate-600">${book.sothe ? `<b class="text-slate-800">Thẻ: ${book.sothe}</b>` : '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleExcelUploadMonth(monthKey) {
+            const inputId = monthKey === 'thang9' ? 'excelFileThang9' : 'excelFileThang11';
+            const fileInput = document.getElementById(inputId);
+            if (fileInput.files.length === 0) {
+                alert("Vui lòng chọn một file Excel trước!");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+                    if (jsonRows.length === 0) {
+                        alert("File Excel trống hoặc không đọc được dữ liệu!");
+                        return;
+                    }
+
+                    let parsedList = [];
+                    jsonRows.forEach(row => {
+                        const code = String(row['Barcode'] || row['barcode'] || row['Mã sách'] || row['ma_sach'] || '').trim();
+                        const sdkcb = String(row['SĐKCB'] || row['sdkcb'] || row['SDKCB'] || '').trim();
+                        const title = String(row['Tên sách'] || row['tensach'] || row['Ten sach'] || '').trim();
+                        const category = String(row['Môn loại'] || row['monloai'] || '').trim();
+                        const price = String(row['Giá tiền'] || row['giatien'] || '').trim();
+                        const unit = String(row['Tên đơn vị'] || row['donvi'] || row['Đơn vị'] || '').trim();
+                        const center = String(row['Nhà'] || row['nha'] || 'Nhà 1').trim();
+                        const sothe = String(row['Số thẻ'] || row['sothe'] || '').trim();
+
+                        if (code || title) {
+                            parsedList.push({ code, sdkcb, title, category, price, unit, center, sothe });
+                        }
+                    });
+
+                    if (monthKey === 'thang9') listThang9 = parsedList;
+                    if (monthKey === 'thang11') listThang11 = parsedList;
+
+                    saveToStorage();
+                    alert(`Đã nạp thành
