@@ -40,19 +40,25 @@
       gap: 10px;
       margin-bottom: 25px;
     }
-    nav a {
+    nav button {
       background: var(--card);
       padding: 12px 15px;
-      text-decoration: none;
+      text-align: left;
       color: var(--text);
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border: none;
       border-left: 4px solid var(--primary);
       font-weight: 600;
       font-size: 0.9rem;
       cursor: pointer;
+      width: 100%;
+      font-family: inherit;
     }
-    nav a small { display: block; font-size: 0.75rem; color: #666; font-weight: normal; margin-top: 3px; }
+    nav button:hover {
+      background: #e8f5e9;
+    }
+    nav button small { display: block; font-size: 0.75rem; color: #666; font-weight: normal; margin-top: 3px; }
     section {
       background: var(--card);
       padding: 25px;
@@ -80,12 +86,12 @@
       width: 100%; padding: 8px 10px; box-sizing: border-box;
       border: 1px solid var(--border); border-radius: 4px; font-size: 0.95rem;
     }
-    button {
+    button.btn-action {
       background-color: var(--primary); color: white; border: none;
       padding: 9px 16px; border-radius: 4px; cursor: pointer; font-weight: 600;
     }
-    button:hover { background-color: var(--primary-hover); }
-    .btn-danger { background-color: #d9534f; }
+    button.btn-action:hover { background-color: var(--primary-hover); }
+    .btn-danger { background-color: #d9534f; color: white; border: none; padding: 9px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
     .btn-danger:hover { background-color: #c9302c; }
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
     table, th, td { border: 1px solid var(--border); }
@@ -117,11 +123,11 @@
 
   <main>
     <nav>
-      <a onclick="switchTab('sec-books', event)">📚 1. Thư viện sách<br><small>Kho sách · Nhập Excel</small></a>
-      <a onclick="switchTab('sec-stories', event)">🔎 2. Danh sách truyện<br><small>Tải Excel 2.000+ truyện</small></a>
-      <a onclick="switchTab('sec-reports', event)">🖼️ 3. Bảng báo cáo<br><small>Tải ảnh & nội dung</small></a>
-      <a onclick="switchTab('sec-manage', event)">🧑‍💼 4. Nhật ký<br><small>Lịch sử thao tác</small></a>
-      <a onclick="switchTab('sec-house-loans', event)">🏠 5. Mượn/Trả 9 Nhà<br><small>Mượn truyện theo nhà</small></a>
+      <button type="button" onclick="switchTab('sec-books')">📚 1. Thư viện sách<br><small>Kho sách · Nhập Excel</small></button>
+      <button type="button" onclick="switchTab('sec-stories')">🔎 2. Danh sách truyện<br><small>Tải Excel 2.000+ truyện</small></button>
+      <button type="button" onclick="switchTab('sec-reports')">🖼️ 3. Bảng báo cáo<br><small>Tải ảnh & nội dung</small></button>
+      <button type="button" onclick="switchTab('sec-manage')">🧑‍💼 4. Nhật ký<br><small>Lịch sử thao tác</small></button>
+      <button type="button" onclick="switchTab('sec-house-loans')">🏠 5. Mượn/Trả 9 Nhà<br><small>Mượn truyện theo nhà</small></button>
     </nav>
 
     <!-- 1. KHO SÁCH -->
@@ -132,7 +138,7 @@
         <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Mã sách | Tên sách | Tác giả (tùy chọn) | Số lượng (tùy chọn)</strong></p>
         <input type="file" id="excel-books-input" accept=".xlsx, .xls, .csv">
         <br><br>
-        <button type="button" onclick="importBooksExcel()">Tải dữ liệu Excel vào Kho</button>
+        <button type="button" class="btn-action" onclick="importBooksExcel()">Tải dữ liệu Excel vào Kho</button>
       </div>
 
       <h3>➕ Thêm từng quyển sách</h3>
@@ -143,7 +149,7 @@
           <div class="form-group"><label>Tác giả</label><input type="text" id="b-author" placeholder="Tác giả..."></div>
           <div class="form-group"><label>Số lượng</label><input type="number" id="b-qty" value="1" min="1"></div>
         </div>
-        <button type="submit">Thêm sách</button>
+        <button type="submit" class="btn-action">Thêm sách</button>
       </form>
 
       <h3>📖 Danh mục sách trong kho (<span id="book-count">0</span> đầu sách)</h3>
@@ -167,7 +173,7 @@
         <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Kỳ/Tháng | Mã sách | Tên truyện</strong></p>
         <input type="file" id="excel-stories-input" accept=".xlsx, .xls, .csv">
         <br><br>
-        <button type="button" onclick="importStoriesExcel()">Tải danh sách Excel lên</button>
+        <button type="button" class="btn-action" onclick="importStoriesExcel()">Tải danh sách Excel lên</button>
       </div>
 
       <h3>➕ Hoặc thêm lẻ từng truyện</h3>
@@ -177,7 +183,7 @@
           <div class="form-group"><label>Mã sách</label><input type="text" id="s-code" placeholder="VD: TR001" required></div>
           <div class="form-group" style="grid-column: span 2;"><label>Tên truyện / sách</label><input type="text" id="s-name" placeholder="Nhập tên truyện..." required></div>
         </div>
-        <button type="submit">Thêm truyện</button>
+        <button type="submit" class="btn-action">Thêm truyện</button>
       </form>
 
       <h3>📋 Danh sách truyện (<span id="story-count">0</span> truyện)</h3>
@@ -201,7 +207,7 @@
         <div class="form-group"><label>Nội dung chi tiết</label><textarea id="r-content" rows="3" required placeholder="Nội dung báo cáo..."></textarea></div>
         <div class="form-group"><label>Hình ảnh minh chứng</label><input type="file" id="r-image" accept="image/*"></div>
         <br>
-        <button type="submit">Lưu báo cáo</button>
+        <button type="submit" class="btn-action">Lưu báo cáo</button>
       </form>
 
       <h3>📋 Danh sách báo cáo đã lưu</h3>
@@ -245,7 +251,7 @@
           <div class="form-group"><label>Tên sách / Truyện mượn</label><input type="text" id="l-book" required placeholder="Tên sách..."></div>
           <div class="form-group"><label>Ngày mượn</label><input type="date" id="l-date" required></div>
         </div>
-        <button type="submit">Ghi nhận Mượn sách</button>
+        <button type="submit" class="btn-action">Ghi nhận Mượn sách</button>
       </form>
 
       <h3>📋 Sổ mượn trả hiện tại</h3>
@@ -270,10 +276,14 @@
     let loans = JSON.parse(localStorage.getItem('lib_loans')) || [];
     let logs = JSON.parse(localStorage.getItem('lib_logs')) || [];
 
-    // --- CHUYỂN TAB ---
-    function switchTab(targetId, event) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(targetId).classList.add('active');
+    // --- CHUYỂN TAB (Đã tối ưu nút bấm mượt mà) ---
+    function switchTab(targetId) {
+      const sections = document.querySelectorAll('section');
+      sections.forEach(sec => sec.classList.remove('active'));
+      const activeSec = document.getElementById(targetId);
+      if(activeSec) {
+        activeSec.classList.add('active');
+      }
       window.scrollTo(0, 0);
     }
 
@@ -315,7 +325,7 @@
             <td>${b.title}</td>
             <td>${b.author || '-'}</td>
             <td>${b.qty}</td>
-            <td><button class="btn-danger" onclick="deleteBook(${index})">Xóa</button></td>
+            <td><button class="btn-danger" onclick="deleteBook(${index})" style="padding:4px 8px; font-size:0.8rem;">Xóa</button></td>
           </tr>
         `;
       });
@@ -348,7 +358,6 @@
         const rows = XLSX.utils.sheet_to_json(sheet, {header: 1});
         
         let countImported = 0;
-        // Bỏ qua dòng tiêu đề (index 0), duyệt các dòng tiếp theo
         for (let i = 1; i < rows.length; i++) {
           const r = rows[i];
           if (r && (r[0] !== undefined || r[1] !== undefined)) {
@@ -356,7 +365,7 @@
               code: String(r[0] || 'MS_Trong'),
               title: String(r[1] || 'Sách chưa có tên'),
               author: String(r[2] || ''),
-              qty: parseInt(r[3]) ? parseInt(r[3]) : 1 // Tự động gán = 1 nếu file thiếu cột số lượng
+              qty: parseInt(r[3]) ? parseInt(r[3]) : 1
             });
             countImported++;
           }
@@ -403,7 +412,7 @@
             <td>${s.period}</td>
             <td>${s.code}</td>
             <td>${s.name}</td>
-            <td><button class="btn-danger" onclick="deleteStory(${index})">Xóa</button></td>
+            <td><button class="btn-danger" onclick="deleteStory(${index})" style="padding:4px 8px; font-size:0.8rem;">Xóa</button></td>
           </tr>
         `;
       });
@@ -558,7 +567,7 @@
             <td>${l.date}</td>
             <td><span style="color:${l.status === 'Đang mượn' ? '#d9534f' : '#2e7d32'}; font-weight:bold;">${l.status}</span></td>
             <td>
-              ${l.status === 'Đang mượn' ? `<button onclick="returnBook(${index})" style="padding:4px 8px; font-size:0.8rem; background:#2e7d32;">Trả sách</button>` : ''}
+              ${l.status === 'Đang mượn' ? `<button onclick="returnBook(${index})" style="padding:4px 8px; font-size:0.8rem; background:#2e7d32; color:white; border:none; border-radius:4px; cursor:pointer;">Trả sách</button>` : ''}
               <button class="btn-danger" onclick="deleteLoan(${index})" style="padding:4px 8px; font-size:0.8rem; margin-left:4px;">Xóa</button>
             </td>
           </tr>
