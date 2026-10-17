@@ -156,8 +156,8 @@
       <input type="text" class="search-box" id="search-book" placeholder="🔍 Tìm mã sách hoặc tên sách..." onkeyup="renderBooks()">
       
       <table>
-        <thead>
-          <tr><th>Mã sách</th><th>Tên sách</th><th>Tác giả</th><th>Số lượng</th><th>Thao tác</th></tr>
+       <thead>
+      <tr><th>Mã sách</th><th>Tên sách</th></tr>
         </thead>
         <tbody id="book-tbody"></tbody>
       </table>
@@ -170,7 +170,7 @@
       <h2>🔎 Danh sách truyện (Hỗ trợ > 2.000 truyện)</h2>
       <div class="excel-box">
         <h3>📥 Nhập 2.000+ Truyện từ File Excel (.xlsx / .csv)</h3>
-        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Kỳ/Tháng | Mã sách | Tên truyện</strong></p>
+        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Mã sách | Tên truyện</strong></p>
         <input type="file" id="excel-stories-input" accept=".xlsx, .xls, .csv">
         <br><br>
         <button type="button" class="btn-action" onclick="importStoriesExcel()">Tải danh sách Excel lên</button>
