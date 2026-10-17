@@ -1,245 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý thư viện & báo cáo</title>
-  <style>
-    :root {
-      --primary: #2e7d32;
-      --primary-hover: #1b5e20;
-      --bg: #f4f6f8;
-      --card: #ffffff;
-      --text: #333333;
-      --border: #e0e0e0;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 0;
-      line-height: 1.5;
-    }
-    header {
-      background-color: var(--primary);
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    header h1 { margin: 0 0 5px 0; font-size: 1.6rem; }
-    header p { margin: 3px 0; font-size: 0.95rem; opacity: 0.9; }
-    .warning-banner {
-      background-color: #fff3cd;
-      color: #856404;
-      padding: 10px 15px;
-      font-size: 0.85rem;
-      margin-top: 15px;
-      border-radius: 4px;
-      display: inline-block;
-      text-align: left;
-    }
-    main {
-      max-width: 1100px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
-    nav {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 25px;
-    }
-    nav a {
-      background: var(--card);
-      padding: 15px;
-      text-decoration: none;
-      color: var(--text);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      border-left: 4px solid var(--primary);
-      transition: transform 0.2s, background 0.2s;
-    }
-    nav a:hover {
-      transform: translateY(-2px);
-      background: #fafafa;
-    }
-    nav a small {
-      display: block;
-      color: #666;
-      margin-top: 5px;
-      font-size: 0.85rem;
-    }
-    section {
-      background: var(--card);
-      padding: 25px;
-      margin-bottom: 25px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      display: none;
-    }
-    section.active {
-      display: block;
-    }
-    h2 {
-      color: var(--primary);
-      margin-top: 0;
-      border-bottom: 2px solid var(--bg);
-      padding-bottom: 10px;
-      font-size: 1.3rem;
-    }
-    h3 {
-      font-size: 1.1rem;
-      margin-top: 25px;
-      color: #444;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-    .stat-card {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 6px;
-      text-align: center;
-      border: 1px solid var(--border);
-    }
-    .stat-card span {
-      display: block;
-      font-size: 0.85rem;
-      color: #666;
-    }
-    .stat-card strong {
-      font-size: 1.6rem;
-      color: var(--primary);
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 9px 12px;
-      box-sizing: border-box;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 0.95rem;
-    }
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    button:hover {
-      background-color: var(--primary-hover);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      font-size: 0.9rem;
-    }
-    table, th, td {
-      border: 1px solid var(--border);
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background-color: #f8f9fa;
-    }
-    .report-card {
-      border: 1px solid var(--border);
-      padding: 15px;
-      margin-top: 15px;
-      border-radius: 6px;
-      background: #fafafa;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-    .report-card img {
-      max-width: 150px;
-      max-height: 150px;
-      border-radius: 4px;
-      object-fit: cover;
-      border: 1px solid var(--border);
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #666;
-      font-size: 0.9rem;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <h1>🌿 Quản lý thư viện & báo cáo</h1>
-  </div>
-  </header>
-
-  <main>
-    <nav>
-      <a href="#sec-books" onclick="switchTab('sec-books', event)">📚 1. Thư viện sách<br><small>Kho sách · Mượn · Trả · 9 nhà</small></a>
-      <a href="#sec-stories" onclick="switchTab('sec-stories', event)">🔎 2. Danh sách truyện<br><small>Tra tên và mã sách theo tháng</small></a>
-      <a href="#sec-reports" onclick="switchTab('sec-reports', event)">🖼️ 3. Bảng báo cáo<br><small>Ảnh minh chứng và nội dung</small></a>
-      <a href="#sec-manage" onclick="switchTab('sec-manage', event)">🧑‍💼 4. Nhân viên<br><small>Nhật ký hoạt động trên thiết bị</small></a>
-    </nav>
-
-    <section id="sec-books" class="active">
-      <h2>📚 Thư viện sách</h2>
-      <p>Quản lý đầu sách, lượt mượn và hoàn trả.</p>
-      
-      <div class="stats-grid">
-        <div class="stat-card"><span>Đầu sách trong kho</span><strong id="st-total">0</strong></div>
-        <div class="stat-card"><span>Đang được mượn</span><strong id="st-borrowed">0</strong></div>
-        <div class="stat-card"><span>Đã hoàn trả</span><strong id="st-returned">0</strong></div>
-        <div class="stat-card"><span>Chưa trả / quá hạn</span><strong id="st-overdue">0</strong></div>
-      </div>
-
-      <h3>➕ Nhập từng quyển sách</h3>
-      <form id="book-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Mã sách</label>
-            <input type="text" id="b-code" required placeholder="VD: MS01">
-          </div>
-          <div class="form-group">
-            <label>Tên sách</label>
-            <input type="text" id="b-title" required placeholder="Nhập tên sách">
-          </div>
-          <div class="form-group">
-            <label>Tác giả</label>
-            <input type="text" id="b-author" placeholder="Tên tác giả">
-          </div>
-          <div class="form-group">
-            <label>Số lượng</label>
-            <input type="number" id="b-qty" value="1" min="1">
-          </div>
-        </div>
-        <button type="submit">Thêm sách vào kho</button>
-      </form>
+HTML
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -278,20 +37,22 @@
     }
     nav {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
       margin-bottom: 25px;
     }
     nav a {
       background: var(--card);
-      padding: 15px;
+      padding: 12px 15px;
       text-decoration: none;
       color: var(--text);
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       border-left: 4px solid var(--primary);
       font-weight: 600;
+      font-size: 0.9rem;
     }
+    nav a small { display: block; font-size: 0.75rem; color: #666; font-weight: normal; margin-top: 3px; }
     section {
       background: var(--card);
       padding: 25px;
@@ -315,9 +76,9 @@
       gap: 12px; margin-bottom: 12px;
     }
     .form-group label { display: block; margin-bottom: 4px; font-weight: 500; font-size: 0.9rem; }
-    .form-group input, .form-group textarea {
+    .form-group input, .form-group select, .form-group textarea {
       width: 100%; padding: 8px 10px; box-sizing: border-box;
-      border: 1px solid var(--border); border-radius: 4px;
+      border: 1px solid var(--border); border-radius: 4px; font-size: 0.95rem;
     }
     button {
       background-color: var(--primary); color: white; border: none;
@@ -337,13 +98,13 @@
       box-sizing: border-box;
       border: 2px solid var(--primary);
       border-radius: 6px;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     .report-card {
       border: 1px solid var(--border); padding: 15px; margin-top: 15px;
-      border-radius: 6px; background: #fafafa; display: flex; gap: 15px;
+      border-radius: 6px; background: #fafafa; display: flex; gap: 15px; align-items: flex-start;
     }
-    .report-card img { max-width: 140px; max-height: 140px; border-radius: 4px; object-fit: cover; }
+    .report-card img { max-width: 150px; max-height: 150px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border); }
     footer { text-align: center; padding: 20px; color: #666; font-size: 0.9rem; }
   </style>
 </head>
@@ -351,164 +112,242 @@
 
   <header>
     <h1>🌿 Quản lý Thư viện & Báo cáo</h1>
-    <p>Thư viện Kim Phụng · Hệ thống lưu trữ nội bộ</p>
+    <p>Hệ thống lưu trữ & Quản lý mượn trả nội bộ</p>
   </header>
 
   <main>
     <nav>
-      <a href="#sec-books" onclick="switchTab('sec-books', event)">📚 1. Thư viện sách</a>
-      <a href="#sec-stories" onclick="switchTab('sec-stories', event)">🔎 2. Danh sách truyện</a>
-      <a href="#sec-reports" onclick="switchTab('sec-reports', event)">🖼️ 3. Bảng báo cáo</a>
-      <a href="#sec-manage" onclick="switchTab('sec-manage', event)">🧑‍💼 4. Nhật ký thao tác</a>
-      <a href="#sec-house-loans" onclick="switchTab('sec-house-loans', event)">🏠 5. Mượn/Trả 9 Nhà<br><small>Quản lý mượn trả theo từng nhà</small></a>
+      <a href="#sec-books" onclick="switchTab('sec-books', event)">📚 1. Thư viện sách<br><small>Kho sách · Nhập Excel</small></a>
+      <a href="#sec-stories" onclick="switchTab('sec-stories', event)">🔎 2. Danh sách truyện<br><small>Tải Excel 2.000+ truyện</small></a>
+      <a href="#sec-reports" onclick="switchTab('sec-reports', event)">🖼️ 3. Bảng báo cáo<br><small>Tải ảnh & nội dung</small></a>
+      <a href="#sec-manage" onclick="switchTab('sec-manage', event)">🧑‍💼 4. Nhật ký<br><small>Lịch sử thao tác</small></a>
+      <a href="#sec-house-loans" onclick="switchTab('sec-house-loans', event)">🏠 5. Mượn/Trả 9 Nhà<br><small>Mượn truyện theo nhà</small></a>
     </nav>
 
     <!-- 1. KHO SÁCH -->
     <section id="sec-books" class="active">
       <h2>📚 Thư viện sách</h2>
       
-      <!-- NHẬP FILE EXCEL SÁCH -->
       <div class="excel-box">
-        <h3>📥 Nhập kho sách từ File Excel / CSV</h3>
-        <p style="font-size:0.85rem; color:#555;">Cột trong Excel nên theo thứ tự: <strong>Mã sách | Tên sách | Tác giả | Số lượng</strong></p>
+        <h3>📥 Nhập kho sách từ File Excel (.xlsx / .csv)</h3>
+        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Mã sách | Tên sách | Tác giả | Số lượng</strong></p>
         <input type="file" id="excel-books-input" accept=".xlsx, .xls, .csv">
-        <button onclick="importBooksExcel()">Tải dữ liệu Excel lên Kho</button>
+        <button onclick="importBooksExcel()">Tải dữ liệu Excel vào Kho</button>
       </div>
-      <h3>📖 Danh mục sách trong kho (<span id="book-
-      <h3>📖 Danh mục sách trong kho</h3>
+
+      <h3>➕ Thêm từng quyển sách</h3>
+      <form id="book-form">
+        <div class="form-row">
+          <div class="form-group"><label>Mã sách</label><input type="text" id="b-code" required placeholder="VD: MS01"></div>
+          <div class="form-group"><label>Tên sách</label><input type="text" id="b-title" required placeholder="Tên sách..."></div>
+          <div class="form-group"><label>Tác giả</label><input type="text" id="b-author" placeholder="Tác giả..."></div>
+          <div class="form-group"><label>Số lượng</label><input type="number" id="b-qty" value="1" min="1"></div>
+        </div>
+        <button type="submit">Thêm sách</button>
+      </form>
+
+      <h3>📖 Danh mục sách trong kho (<span id="book-count">0</span> đầu sách)</h3>
+      <input type="text" class="search-box" id="search-book" placeholder="🔍 Tìm mã sách hoặc tên sách..." onkeyup="renderBooks()">
+      
       <table>
         <thead>
-          <tr>
-            <th>Mã sách</th>
-            <th>Tên sách</th>
-            <th>Tác giả</th>
-            <th>Tổng SL</th>
-            <th>Thao tác</th>
-          </tr>
+          <tr><th>Mã sách</th><th>Tên sách</th><th>Tác giả</th><th>Số lượng</th><th>Thao tác</th></tr>
         </thead>
         <tbody id="book-tbody"></tbody>
       </table>
+      <br>
+      <button class="btn-danger" onclick="clearAllBooks()">🗑️ Xóa toàn bộ kho sách</button>
     </section>
 
+    <!-- 2. DANH SÁCH TRUYỆN -->
     <section id="sec-stories">
-      <h2>🔎 Danh sách truyện</h2>
-      <p>Tìm nhanh tên truyện hoặc mã sách theo kỳ lưu trữ.</p>
+      <h2>🔎 Danh sách truyện (Hỗ trợ > 2.000 truyện)</h2>
       
+      <div class="excel-box">
+        <h3>📥 Nhập 2.000+ Truyện từ File Excel (.xlsx / .csv)</h3>
+        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Kỳ/Tháng | Mã sách | Tên truyện</strong></p>
+        <input type="file" id="excel-stories-input" accept=".xlsx, .xls, .csv">
+        <button onclick="importStoriesExcel()">Tải danh sách Excel lên</button>
+      </div>
+
+      <h3>➕ Hoặc thêm lẻ từng truyện</h3>
       <form id="story-form">
         <div class="form-row">
-          <div class="form-group">
-            <label>Kỳ / Tháng</label>
-            <input type="text" id="s-period" required placeholder="VD: Tháng 10/2026">
-          </div>
-          <div class="form-group">
-            <label>Mã sách</label>
-            <input type="text" id="s-code" required placeholder="VD: TR01">
-          </div>
-          <div class="form-group" style="grid-column: span 2;">
-            <label>Tên truyện / sách</label>
-            <input type="text" id="s-name" required placeholder="Nhập tên truyện">
-          </div>
+          <div class="form-group"><label>Kỳ / Tháng</label><input type="text" id="s-period" placeholder="VD: 10/2026" required></div>
+          <div class="form-group"><label>Mã sách</label><input type="text" id="s-code" placeholder="VD: TR001" required></div>
+          <div class="form-group" style="grid-column: span 2;"><label>Tên truyện / sách</label><input type="text" id="s-name" placeholder="Nhập tên truyện..." required></div>
         </div>
-        <button type="submit">Thêm danh mục truyện</button>
+        <button type="submit">Thêm truyện</button>
       </form>
+
+      <h3>📋 Danh sách truyện (<span id="story-count">0</span> truyện)</h3>
+      <input type="text" class="search-box" id="search-story" placeholder="🔍 Tìm nhanh tên truyện, mã sách hoặc kỳ lưu trữ..." onkeyup="renderStories()">
 
       <table>
         <thead>
-          <tr>
-            <th>Kỳ</th>
-            <th>Mã sách</th>
-            <th>Tên truyện / sách</th>
-            <th>Thao tác</th>
-          </tr>
+          <tr><th>Kỳ</th><th>Mã sách</th><th>Tên truyện / sách</th><th>Thao tác</th></tr>
         </thead>
         <tbody id="story-tbody"></tbody>
       </table>
+      <br>
+      <button class="btn-danger" onclick="clearAllStories()">🗑️ Xóa toàn bộ truyện</button>
     </section>
 
+    <!-- 3. BẢNG BÁO CÁO -->
     <section id="sec-reports">
-      <h2>🖼️ Bảng báo cáo</h2>
-      <p>Tải hình ảnh minh chứng lên và ghi nội dung ở bên cạnh.</p>
-      
+      <h2>🖼️ Bảng báo cáo minh chứng</h2>
       <form id="report-form">
-        <div class="form-group">
-          <label>Tiêu đề báo cáo</label>
-          <input type="text" id="r-title" required placeholder="Tiêu đề...">
-        </div>
-        <div class="form-group">
-          <label>Nội dung chi tiết</label>
-          <textarea id="r-content" rows="3" required placeholder="Nhập nội dung báo cáo..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>Hình ảnh minh chứng</label>
-          <input type="file" id="r-img" accept="image/*">
-        </div>
-        <button type="submit">Tạo báo cáo mới</button>
+        <div class="form-group"><label>Tiêu đề báo cáo</label><input type="text" id="r-title" required placeholder="Tiêu đề..."></div>
+        <div class="form-group"><label>Nội dung chi tiết</label><textarea id="r-content" rows="3" required placeholder="Nội dung báo cáo..."></textarea></div>
+        <div class="form-group"><label>Hình ảnh minh chứng (Tải file ảnh lên)</label><input type="file" id="r-img" accept="image/*"></div>
+        <button type="submit">Lưu báo cáo</button>
       </form>
 
-      <h3>📂 Báo cáo đã lưu</h3>
+      <h3>📂 Danh sách báo cáo đã tạo</h3>
       <div id="report-container"></div>
     </section>
 
+    <!-- 4. NHẬT KÝ HOẠT ĐỘNG -->
     <section id="sec-manage">
-      <h2>🧑‍💼 Nhân viên & nhật ký hoạt động</h2>
-      <p>Xem lịch sử thao tác được ghi nhận trên thiết bị này.</p>
-      <div class="stats-grid">
-        <div class="stat-card"><span>Tổng sự kiện</span><strong id="log-total">0</strong></div>
-      </div>
+      <h2>🧑‍💼 Nhật ký hoạt động trên thiết bị</h2>
       <table>
         <thead>
-          <tr>
-            <th>Thời gian</th>
-            <th>Hành động</th>
-            <th>Chi tiết</th>
-          </tr>
+          <tr><th>Thời gian</th><th>Hành động</th><th>Chi tiết</th></tr>
         </thead>
         <tbody id="log-tbody"></tbody>
       </table>
     </section>
+
+    <!-- 5. MƯỢN TRẢ 9 NHÀ -->
+    <section id="sec-house-loans">
+      <h2>🏠 Quản lý Mượn / Trả Truyện Cho 9 Nhà</h2>
+      
+      <div style="background: #f0f7f4; border: 1px solid #b2dfdb; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+        <h3>➕ Ghi nhận Lượt Mượn Truyện</h3>
+        <form id="house-loan-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Chọn Nhà</label>
+              <select id="hl-house" required>
+                <option value="">-- Chọn Nhà --</option>
+                <option value="Nhà 1">Nhà 1</option>
+                <option value="Nhà 2">Nhà 2</option>
+                <option value="Nhà 3">Nhà 3</option>
+                <option value="Nhà 4">Nhà 4</option>
+                <option value="Nhà 5">Nhà 5</option>
+                <option value="Nhà 6">Nhà 6</option>
+                <option value="Nhà 7">Nhà 7</option>
+                <option value="Nhà 8">Nhà 8</option>
+                <option value="Nhà 9">Nhà 9</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tên Người Mượn</label>
+              <input type="text" id="hl-borrower" required placeholder="Nhập tên người mượn...">
+            </div>
+            <div class="form-group">
+              <label>Mã Sách / Mã Truyện</label>
+              <input type="text" id="hl-code" required placeholder="VD: TR001" onchange="autoFillBookName(this.value)">
+            </div>
+            <div class="form-group">
+              <label>Tên Truyện / Sách</label>
+              <input type="text" id="hl-title" required placeholder="Tự điền nếu có trong danh sách...">
+            </div>
+          </div>
+          <button type="submit">Xác Nhận Mượn</button>
+        </form>
+      </div>
+
+      <h3>📋 Tra cứu Trạng Thái & Lịch Sử Mượn Trả</h3>
+      <div class="form-row" style="margin-bottom: 15px;">
+        <div class="form-group">
+          <label>Lọc Theo Nhà</label>
+          <select id="filter-house" onchange="renderHouseLoans()">
+            <option value="">-- Tất cả 9 Nhà --</option>
+            <option value="Nhà 1">Nhà 1</option>
+            <option value="Nhà 2">Nhà 2</option>
+            <option value="Nhà 3">Nhà 3</option>
+            <option value="Nhà 4">Nhà 4</option>
+            <option value="Nhà 5">Nhà 5</option>
+            <option value="Nhà 6">Nhà 6</option>
+            <option value="Nhà 7">Nhà 7</option>
+            <option value="Nhà 8">Nhà 8</option>
+            <option value="Nhà 9">Nhà 9</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Tìm Kiếm Nhanh</label>
+          <input type="text" class="search-box" id="search-house-loan" placeholder="🔍 Tìm theo Tên người mượn, Mã sách hoặc Tên truyện..." onkeyup="renderHouseLoans()" style="margin:0;">
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nhà</th>
+            <th>Người mượn</th>
+            <th>Mã sách</th>
+            <th>Tên truyện</th>
+            <th>Ngày mượn</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody id="house-loan-tbody"></tbody>
+      </table>
+    </section>
   </main>
 
-  <footer>
-    Quản lý thư viện · Bản chạy trên trình duyệt · 
-  </footer>
+  <footer>Thư viện Kim Phụng · Hệ thống chạy mượt trên trình duyệt · Tự động lưu trên thiết bị</footer>
 
   <script>
+    // CHUYỂN TAB DỄ DÀNG
     function switchTab(targetId, event) {
       if (event) event.preventDefault();
       document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
       document.getElementById(targetId).classList.add('active');
     }
 
+    // DỮ LIỆU BẢO LƯU TRONG LOCALSTORAGE
     let books = JSON.parse(localStorage.getItem('kp_books')) || [];
     let stories = JSON.parse(localStorage.getItem('kp_stories')) || [];
     let reports = JSON.parse(localStorage.getItem('kp_reports')) || [];
     let logs = JSON.parse(localStorage.getItem('kp_logs')) || [];
+    let houseLoans = JSON.parse(localStorage.getItem('kp_house_loans')) || [];
 
     function addLog(action, detail) {
       logs.unshift({ time: new Date().toLocaleString(), action, detail });
+      if(logs.length > 100) logs.pop();
       localStorage.setItem('kp_logs', JSON.stringify(logs));
       renderLogs();
     }
 
-    const bookForm = document.getElementById('book-form');
-    const bookTbody = document.getElementById('book-tbody');
-
+    // 1. KHO SÁCH
     function renderBooks() {
-      bookTbody.innerHTML = '';
-      books.forEach((b, index) => {
-        bookTbody.innerHTML += `
+      const keyword = document.getElementById('search-book').value.toLowerCase();
+      const tbody = document.getElementById('book-tbody');
+      tbody.innerHTML = '';
+      
+      const filtered = books.filter(b => 
+        (b.code && b.code.toLowerCase().includes(keyword)) || 
+        (b.title && b.title.toLowerCase().includes(keyword))
+      );
+
+      document.getElementById('book-count').textContent = books.length;
+
+      filtered.slice(0, 100).forEach((b, index) => {
+        tbody.innerHTML += `
           <tr>
             <td>${b.code}</td>
             <td>${b.title}</td>
-            <td>${b.author}</td>
-            <td>${b.qty}</td>
-            <td><button onclick="deleteBook(${index})" style="background:#d9534f; padding:5px 10px;">Xóa</button></td>
+            <td>${b.author || ''}</td>
+            <td>${b.qty || 1}</td>
+            <td><button class="btn-danger" onclick="deleteBook(${index})" style="padding:4px 8px;">Xóa</button></td>
           </tr>`;
       });
-      document.getElementById('st-total').textContent = books.length;
     }
 
-    bookForm.addEventListener('submit', (e) => {
+    document.getElementById('book-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const b = {
         code: document.getElementById('b-code').value,
@@ -518,35 +357,82 @@
       };
       books.push(b);
       localStorage.setItem('kp_books', JSON.stringify(books));
-      addLog('Thêm sách', `Thêm sách: ${b.title}`);
       renderBooks();
-      bookForm.reset();
+      document.getElementById('book-form').reset();
     });
 
     function deleteBook(index) {
-      addLog('Xóa sách', `Xóa sách mã: ${books[index].code}`);
       books.splice(index, 1);
       localStorage.setItem('kp_books', JSON.stringify(books));
       renderBooks();
     }
 
-    const storyForm = document.getElementById('story-form');
-    const storyTbody = document.getElementById('story-tbody');
+    function clearAllBooks() {
+      if(confirm("Bạn có chắc muốn xóa toàn bộ Kho Sách?")) {
+        books = [];
+        localStorage.removeItem('kp_books');
+        renderBooks();
+      }
+    }
 
+    function importBooksExcel() {
+      const fileInput = document.getElementById('excel-books-input');
+      if(!fileInput.files[0]) return alert("Hãy chọn 1 file Excel (.xlsx)!");
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, {type: 'array'});
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+
+        let count = 0;
+        jsonData.forEach((row, idx) => {
+          if(idx > 0 && row.length >= 2) {
+            books.push({
+              code: row[0] || `MS${books.length+1}`,
+              title: row[1] || 'Chưa có tên',
+              author: row[2] || '',
+              qty: row[3] || 1
+            });
+            count++;
+          }
+        });
+
+        localStorage.setItem('kp_books', JSON.stringify(books));
+        addLog('Nhập Excel Sách', `Đã nhập ${count} sách`);
+        alert(`Thành công! Đã nạp ${count} sách.`);
+        renderBooks();
+      };
+      reader.readAsArrayBuffer(fileInput.files[0]);
+    }
+
+    // 2. DANH SÁCH TRUYỆN 2.000+
     function renderStories() {
-      storyTbody.innerHTML = '';
-      stories.forEach((s, index) => {
-        storyTbody.innerHTML += `
+      const keyword = document.getElementById('search-story').value.toLowerCase();
+      const tbody = document.getElementById('story-tbody');
+      tbody.innerHTML = '';
+      
+      const filtered = stories.filter(s => 
+        (s.name && s.name.toLowerCase().includes(keyword)) || 
+        (s.code && s.code.toLowerCase().includes(keyword)) ||
+        (s.period && s.period.toLowerCase().includes(keyword))
+      );
+
+      document.getElementById('story-count').textContent = stories.length;
+
+      filtered.slice(0, 100).forEach((s, index) => {
+        tbody.innerHTML += `
           <tr>
             <td>${s.period}</td>
             <td>${s.code}</td>
             <td>${s.name}</td>
-            <td><button onclick="deleteStory(${index})" style="background:#d9534f; padding:5px 10px;">Xóa</button></td>
+            <td><button class="btn-danger" onclick="deleteStory(${index})" style="padding:4px 8px;">Xóa</button></td>
           </tr>`;
       });
     }
 
-    storyForm.addEventListener('submit', (e) => {
+    document.getElementById('story-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const s = {
         period: document.getElementById('s-period').value,
@@ -555,9 +441,8 @@
       };
       stories.push(s);
       localStorage.setItem('kp_stories', JSON.stringify(stories));
-      addLog('Thêm truyện', `Thêm truyện kỳ ${s.period}: ${s.name}`);
       renderStories();
-      storyForm.reset();
+      document.getElementById('story-form').reset();
     });
 
     function deleteStory(index) {
@@ -566,19 +451,58 @@
       renderStories();
     }
 
-    const reportForm = document.getElementById('report-form');
-    const reportContainer = document.getElementById('report-container');
+    function clearAllStories() {
+      if(confirm("Xác nhận xóa toàn bộ danh sách truyện?")) {
+        stories = [];
+        localStorage.removeItem('kp_stories');
+        renderStories();
+      }
+    }
 
+    function importStoriesExcel() {
+      const fileInput = document.getElementById('excel-stories-input');
+      if(!fileInput.files[0]) return alert("Hãy chọn file Excel danh sách truyện!");
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, {type: 'array'});
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+
+        let count = 0;
+        jsonData.forEach((row, idx) => {
+          if(idx > 0 && row.length >= 2) {
+            stories.push({
+              period: row[0] || 'T10',
+              code: row[1] || `TR${stories.length+1}`,
+              name: row[2] || row[1] || 'Chưa rõ tên'
+            });
+            count++;
+          }
+        });
+
+        localStorage.setItem('kp_stories', JSON.stringify(stories));
+        addLog('Nhập Excel Truyện', `Đã nạp ${count} truyện`);
+        alert(`Tuyệt vời! Đã nhập thành công ${count} truyện.`);
+        renderStories();
+      };
+      reader.readAsArrayBuffer(fileInput.files[0]);
+    }
+
+    // 3. BÁO CÁO
+    const reportForm = document.getElementById('report-form');
     function renderReports() {
-      reportContainer.innerHTML = '';
+      const container = document.getElementById('report-container');
+      container.innerHTML = '';
       reports.forEach((r, index) => {
-        reportContainer.innerHTML += `
+        container.innerHTML += `
           <div class="report-card">
             ${r.img ? `<img src="${r.img}" alt="Minh chứng">` : ''}
-            <div style="flex-grow: 1;">
-              <h4 style="margin:0 0 8px 0; color:var(--primary);">${r.title}</h4>
+            <div style="flex-grow:1;">
+              <h4 style="margin:0 0 5px 0; color:var(--primary); font-size:1.1rem;">${r.title}</h4>
               <p style="margin:0 0 10px 0; white-space: pre-line;">${r.content}</p>
-              <button onclick="deleteReport(${index})" style="background:#d9534f; padding:5px 10px; font-size:0.85rem;">Xóa báo cáo</button>
+              <button class="btn-danger" onclick="deleteReport(${index})" style="padding:4px 8px; font-size:0.8rem;">Xóa báo cáo</button>
             </div>
           </div>`;
       });
@@ -608,7 +532,7 @@
       };
       reports.push(r);
       localStorage.setItem('kp_reports', JSON.stringify(reports));
-      addLog('Tạo báo cáo', `Tiêu đề: ${r.title}`);
+      addLog('Tạo báo cáo', `Báo cáo: ${r.title}`);
       renderReports();
       reportForm.reset();
     }
@@ -619,24 +543,110 @@
       renderReports();
     }
 
-    const logTbody = document.getElementById('log-tbody');
+    // 4. NHẬT KÝ
     function renderLogs() {
-      logTbody.innerHTML = '';
+      const tbody = document.getElementById('log-tbody');
+      tbody.innerHTML = '';
       logs.forEach(l => {
-        logTbody.innerHTML += `
-          <tr>
-            <td>${l.time}</td>
-            <td><strong>${l.action}</strong></td>
-            <td>${l.detail}</td>
-          </tr>`;
+        tbody.innerHTML += `<tr><td>${l.time}</td><td><strong>${l.action}</strong></td><td>${l.detail}</td></tr>`;
       });
-      document.getElementById('log-total').textContent = logs.length;
     }
 
+    // 5. MƯỢN TRẢ 9 NHÀ
+    function autoFillBookName(code) {
+      if (!code) return;
+      const match = stories.find(s => s.code && s.code.toLowerCase() === code.trim().toLowerCase());
+      if (match && match.name) {
+        document.getElementById('hl-title').value = match.name;
+      }
+    }
+
+    function renderHouseLoans() {
+      const selectedHouse = document.getElementById('filter-house').value;
+      const keyword = document.getElementById('search-house-loan').value.toLowerCase();
+      const tbody = document.getElementById('house-loan-tbody');
+      tbody.innerHTML = '';
+
+      const filtered = houseLoans.filter(item => {
+        const matchHouse = !selectedHouse || item.house === selectedHouse;
+        const matchKey = (item.borrower && item.borrower.toLowerCase().includes(keyword)) ||
+                         (item.code && item.code.toLowerCase().includes(keyword)) ||
+                         (item.title && item.title.toLowerCase().includes(keyword));
+        return matchHouse && matchKey;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#888;">Chưa có dữ liệu mượn trả.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach((item) => {
+        const actualIndex = houseLoans.indexOf(item);
+        const statusTag = item.returned 
+          ? `<span style="color:#2e7d32; font-weight:600;">Đã trả (${item.returnDate})</span>`
+          : `<span style="color:#d9534f; font-weight:600;">Đang mượn</span>`;
+
+        const actionBtn = item.returned
+          ? `<button style="background:#888; padding:4px 8px;" disabled>Đã trả</button>`
+          : `<button onclick="returnHouseBook(${actualIndex})" style="background:#2e7d32; padding:4px 10px;">Hoàn Trả</button>`;
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${item.house}</strong></td>
+            <td>${item.borrower}</td>
+            <td>${item.code}</td>
+            <td>${item.title}</td>
+            <td>${item.borrowDate}</td>
+            <td>${statusTag}</td>
+            <td>
+              ${actionBtn}
+              <button class="btn-danger" onclick="deleteHouseLoan(${actualIndex})" style="padding:4px 8px; margin-left:5px;">Xóa</button>
+            </td>
+          </tr>`;
+      });
+    }
+
+    document.getElementById('house-loan-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newLoan = {
+        house: document.getElementById('hl-house').value,
+        borrower: document.getElementById('hl-borrower').value,
+        code: document.getElementById('hl-code').value,
+        title: document.getElementById('hl-title').value,
+        borrowDate: new Date().toLocaleDateString('vi-VN'),
+        returned: false,
+        returnDate: null
+      };
+
+      houseLoans.unshift(newLoan);
+      localStorage.setItem('kp_house_loans', JSON.stringify(houseLoans));
+      addLog('Mượn truyện 9 nhà', `${newLoan.borrower} (${newLoan.house}) mượn mã ${newLoan.code}`);
+      renderHouseLoans();
+      document.getElementById('house-loan-form').reset();
+    });
+
+    function returnHouseBook(index) {
+      houseLoans[index].returned = true;
+      houseLoans[index].returnDate = new Date().toLocaleDateString('vi-VN');
+      localStorage.setItem('kp_house_loans', JSON.stringify(houseLoans));
+      addLog('Trả truyện 9 nhà', `${houseLoans[index].borrower} (${houseLoans[index].house}) đã trả mã ${houseLoans[index].code}`);
+      renderHouseLoans();
+    }
+
+    function deleteHouseLoan(index) {
+      if (confirm("Xóa lượt ghi nhận mượn này?")) {
+        houseLoans.splice(index, 1);
+        localStorage.setItem('kp_house_loans', JSON.stringify(houseLoans));
+        renderHouseLoans();
+      }
+    }
+
+    // Chạy các hàm tải dữ liệu khi khởi động
     renderBooks();
     renderStories();
     renderReports();
     renderLogs();
+    renderHouseLoans();
   </script>
 </body>
 </html>
