@@ -78,7 +78,7 @@
     }
     .form-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 12px; margin-bottom: 12px;
     }
     .form-group label { display: block; margin-bottom: 4px; font-weight: 500; font-size: 0.9rem; }
@@ -93,10 +93,11 @@
     button.btn-action:hover { background-color: var(--primary-hover); }
     .btn-danger { background-color: #d9534f; color: white; border: none; padding: 9px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
     .btn-danger:hover { background-color: #c9302c; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.88rem; }
     table, th, td { border: 1px solid var(--border); }
-    th, td { padding: 9px; text-align: left; }
-    th { background-color: #f8f9fa; }
+    th, td { padding: 8px; text-align: left; }
+    th { background-color: #f8f9fa; white-space: nowrap; }
     .search-box {
       margin: 15px 0;
       padding: 10px;
@@ -135,32 +136,50 @@
       <h2>📚 Thư viện sách</h2>
       <div class="excel-box">
         <h3>📥 Nhập kho sách từ File Excel (.xlsx / .csv)</h3>
-        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Mã sách | Tên sách | Tác giả (tùy chọn) | Số lượng (tùy chọn)</strong></p>
+        <p style="font-size:0.85rem; color:#555;">Tự động nhận diện cột từ Excel: <strong>STT | Tên đơn vị | Số thẻ | SĐKCB | Barcode | Tên sách | Giá tiền | Môn loại | Kho</strong></p>
         <input type="file" id="excel-books-input" accept=".xlsx, .xls, .csv">
         <br><br>
         <button type="button" class="btn-action" onclick="importBooksExcel()">Tải dữ liệu Excel vào Kho</button>
       </div>
 
-      <h3>➕ Thêm từng quyển sách</h3>
+      <h3>➕ Thêm lẻ quyển sách</h3>
       <form id="book-form" onsubmit="addBook(event)">
         <div class="form-row">
-          <div class="form-group"><label>Mã sách</label><input type="text" id="b-code" required placeholder="VD: MS01"></div>
-          <div class="form-group"><label>Tên sách</label><input type="text" id="b-title" required placeholder="Tên sách..."></div>
-          <div class="form-group"><label>Tác giả</label><input type="text" id="b-author" placeholder="Tác giả..."></div>
-          <div class="form-group"><label>Số lượng</label><input type="number" id="b-qty" value="1" min="1"></div>
+          <div class="form-group"><label>SĐKCB / Mã</label><input type="text" id="b-sdkcb" placeholder="VD: SĐKCB01"></div>
+          <div class="form-group"><label>Barcode</label><input type="text" id="b-barcode" placeholder="Mã vạch..."></div>
+          <div class="form-group" style="grid-column: span 2;"><label>Tên sách</label><input type="text" id="b-title" required placeholder="Nhập tên sách..."></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Đơn vị</label><input type="text" id="b-donvi" placeholder="Đơn vị..."></div>
+          <div class="form-group"><label>Giá tiền</label><input type="text" id="b-price" placeholder="Giá..."></div>
+          <div class="form-group"><label>Môn loại</label><input type="text" id="b-monloai" placeholder="Môn loại..."></div>
+          <div class="form-group"><label>Kho</label><input type="text" id="b-kho" placeholder="Tên kho..."></div>
         </div>
         <button type="submit" class="btn-action">Thêm sách</button>
       </form>
 
       <h3>📖 Danh mục sách trong kho (<span id="book-count">0</span> đầu sách)</h3>
-      <input type="text" class="search-box" id="search-book" placeholder="🔍 Tìm mã sách hoặc tên sách..." onkeyup="renderBooks()">
+      <input type="text" class="search-box" id="search-book" placeholder="🔍 Tìm kiếm theo Tên sách, SĐKCB, Barcode, Môn loại..." onkeyup="renderBooks()">
       
-      <table>
-       <thead>
-      <tr><th>Mã sách</th><th>Tên sách</th></tr>
-        </thead>
-        <tbody id="book-tbody"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Tên đơn vị</th>
+              <th>Số thẻ</th>
+              <th>SĐKCB</th>
+              <th>Barcode</th>
+              <th>Tên sách</th>
+              <th>Giá tiền</th>
+              <th>Môn loại</th>
+              <th>Kho</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="book-tbody"></tbody>
+        </table>
+      </div>
       <br>
       <button type="button" class="btn-danger" onclick="clearAllBooks()">🗑️ Xóa toàn bộ kho sách</button>
     </section>
@@ -170,7 +189,7 @@
       <h2>🔎 Danh sách truyện (Hỗ trợ > 2.000 truyện)</h2>
       <div class="excel-box">
         <h3>📥 Nhập 2.000+ Truyện từ File Excel (.xlsx / .csv)</h3>
-        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Mã sách | Tên truyện</strong></p>
+        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong> Mã sách | Tên truyện</strong></p>
         <input type="file" id="excel-stories-input" accept=".xlsx, .xls, .csv">
         <br><br>
         <button type="button" class="btn-action" onclick="importStoriesExcel()">Tải danh sách Excel lên</button>
@@ -189,12 +208,14 @@
       <h3>📋 Danh sách truyện (<span id="story-count">0</span> truyện)</h3>
       <input type="text" class="search-box" id="search-story" placeholder="🔍 Tìm nhanh tên truyện, mã sách hoặc kỳ lưu trữ..." onkeyup="renderStories()">
 
-      <table>
-        <thead>
-          <tr><th>Kỳ</th><th>Mã sách</th><th>Tên truyện / sách</th><th>Thao tác</th></tr>
-        </thead>
-        <tbody id="story-tbody"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr><th>Kỳ</th><th>Mã sách</th><th>Tên truyện / sách</th><th>Thao tác</th></tr>
+          </thead>
+          <tbody id="story-tbody"></tbody>
+        </table>
+      </div>
       <br>
       <button type="button" class="btn-danger" onclick="clearAllStories()">🗑️ Xóa toàn bộ truyện</button>
     </section>
@@ -218,12 +239,14 @@
     <section id="sec-manage">
       <h2>🧑‍💼 Nhật ký hệ thống</h2>
       <p>Lịch sử các hoạt động thêm, xóa, nhập liệu gần đây.</p>
-      <table>
-        <thead>
-          <tr><th>Thời gian</th><th>Hành động</th></tr>
-        </thead>
-        <tbody id="log-tbody"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr><th>Thời gian</th><th>Hành động</th></tr>
+          </thead>
+          <tbody id="log-tbody"></tbody>
+        </table>
+      </div>
       <br>
       <button type="button" class="btn-danger" onclick="clearLogs()">Xóa nhật ký</button>
     </section>
@@ -255,12 +278,14 @@
       </form>
 
       <h3>📋 Sổ mượn trả hiện tại</h3>
-      <table>
-        <thead>
-          <tr><th>Nhà</th><th>Tên sách</th><th>Ngày mượn</th><th>Trạng thái</th><th>Thao tác</th></tr>
-        </thead>
-        <tbody id="loan-tbody"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr><th>Nhà</th><th>Tên sách</th><th>Ngày mượn</th><th>Trạng thái</th><th>Thao tác</th></tr>
+          </thead>
+          <tbody id="loan-tbody"></tbody>
+        </table>
+      </div>
     </section>
   </main>
 
@@ -276,7 +301,7 @@
     let loans = JSON.parse(localStorage.getItem('lib_loans')) || [];
     let logs = JSON.parse(localStorage.getItem('lib_logs')) || [];
 
-    // --- CHUYỂN TAB (Đã tối ưu nút bấm mượt mà) ---
+    // --- CHUYỂN TAB ---
     function switchTab(targetId) {
       const sections = document.querySelectorAll('section');
       sections.forEach(sec => sec.classList.remove('active'));
@@ -295,17 +320,31 @@
       renderLogs();
     }
 
-    // --- 1. KHO SÁCH ---
+    // --- 1. KHO SÁCH (Tối ưu theo đúng ảnh Excel mới) ---
     function addBook(e) {
       e.preventDefault();
-      const code = document.getElementById('b-code').value.trim();
+      const donvi = document.getElementById('b-donvi').value.trim();
+      const sdkcb = document.getElementById('b-sdkcb').value.trim();
+      const barcode = document.getElementById('b-barcode').value.trim();
       const title = document.getElementById('b-title').value.trim();
-      const author = document.getElementById('b-author').value.trim();
-      const qty = parseInt(document.getElementById('b-qty').value) || 1;
+      const price = document.getElementById('b-price').value.trim();
+      const monloai = document.getElementById('b-monloai').value.trim();
+      const kho = document.getElementById('b-kho').value.trim();
 
-      books.push({ code, title, author, qty });
+      books.push({
+        stt: books.length + 1,
+        donvi: donvi || '-',
+        sothe: '-',
+        sdkcb: sdkcb || '-',
+        barcode: barcode || '-',
+        title: title,
+        price: price || '-',
+        monloai: monloai || '-',
+        kho: kho || '-'
+      });
+
       localStorage.setItem('lib_books', JSON.stringify(books));
-      logAction(`Thêm sách vào kho: ${title} (${code})`);
+      logAction(`Thêm sách vào kho: ${title}`);
       document.getElementById('book-form').reset();
       renderBooks();
     }
@@ -315,16 +354,27 @@
       const tbody = document.getElementById('book-tbody');
       tbody.innerHTML = '';
       
-      const filtered = books.filter(b => b.code.toLowerCase().includes(keyword) || b.title.toLowerCase().includes(keyword));
+      const filtered = books.filter(b => 
+        (b.title && b.title.toLowerCase().includes(keyword)) ||
+        (b.sdkcb && b.sdkcb.toLowerCase().includes(keyword)) ||
+        (b.barcode && b.barcode.toLowerCase().includes(keyword)) ||
+        (b.monloai && b.monloai.toLowerCase().includes(keyword))
+      );
+      
       document.getElementById('book-count').innerText = books.length;
 
       filtered.forEach((b, index) => {
         tbody.innerHTML += `
           <tr>
-            <td>${b.code}</td>
-            <td>${b.title}</td>
-            <td>${b.author || '-'}</td>
-            <td>${b.qty}</td>
+            <td>${b.stt || (index + 1)}</td>
+            <td>${b.donvi || '-'}</td>
+            <td>${b.sothe || '-'}</td>
+            <td>${b.sdkcb || '-'}</td>
+            <td>${b.barcode || '-'}</td>
+            <td><strong>${b.title || '-'}</strong></td>
+            <td>${b.price || '-'}</td>
+            <td>${b.monloai || '-'}</td>
+            <td>${b.kho || '-'}</td>
             <td><button class="btn-danger" onclick="deleteBook(${index})" style="padding:4px 8px; font-size:0.8rem;">Xóa</button></td>
           </tr>
         `;
@@ -347,6 +397,7 @@
       }
     }
 
+    // Đọc Excel linh hoạt tự dò tìm cột theo tên trong Ảnh 2
     function importBooksExcel() {
       const fileInput = document.getElementById('excel-books-input');
       if (!fileInput.files.length) return alert('Vui lòng chọn file Excel!');
@@ -356,24 +407,51 @@
         const workbook = XLSX.read(data, {type: 'array'});
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(sheet, {header: 1});
+
+        if (rows.length < 2) return alert('File Excel không có dữ liệu!');
+
+        // Dò vị trí cột dựa vào dòng tiêu đề (Dòng 0)
+        const headerRow = rows[0].map(col => String(col || '').trim().toLowerCase());
         
+        let idxSTT = headerRow.findIndex(c => c.includes('stt'));
+        let idxDonVi = headerRow.findIndex(c => c.includes('đơn vị') || c.includes('don vi'));
+        let idxSoThe = headerRow.findIndex(c => c.includes('thẻ') || c.includes('the'));
+        let idxSDKCB = headerRow.findIndex(c => c.includes('sdkcb') || c.includes('mã') || c.includes('ma'));
+        let idxBarcode = headerRow.findIndex(c => c.includes('barcode') || c.includes('vạch'));
+        let idxTitle = headerRow.findIndex(c => c.includes('tên sách') || c.includes('ten sach') || c.includes('sách'));
+        let idxPrice = headerRow.findIndex(c => c.includes('giá') || c.includes('gia'));
+        let idxMonLoai = headerRow.findIndex(c => c.includes('môn loại') || c.includes('mon loai'));
+        let idxKho = headerRow.findIndex(c => c.includes('kho'));
+
+        // Mặc định nếu không tìm thấy tiêu đề thì lấy theo đúng thứ tự cột từ Ảnh 2
+        if (idxTitle === -1) idxTitle = 5;
+        if (idxSDKCB === -1) idxSDKCB = 3;
+
         let countImported = 0;
         for (let i = 1; i < rows.length; i++) {
           const r = rows[i];
-          if (r && (r[0] !== undefined || r[1] !== undefined)) {
-            books.push({
-              code: String(r[0] || 'MS_Trong'),
-              title: String(r[1] || 'Sách chưa có tên'),
-              author: String(r[2] || ''),
-              qty: parseInt(r[3]) ? parseInt(r[3]) : 1
-            });
-            countImported++;
+          if (r && r.length > 0) {
+            const titleVal = r[idxTitle] !== undefined ? String(r[idxTitle]).trim() : '';
+            if (titleVal) {
+              books.push({
+                stt: idxSTT !== -1 && r[idxSTT] ? r[idxSTT] : (books.length + 1),
+                donvi: idxDonVi !== -1 && r[idxDonVi] ? String(r[idxDonVi]) : '',
+                sothe: idxSoThe !== -1 && r[idxSoThe] ? String(r[idxSoThe]) : '',
+                sdkcb: idxSDKCB !== -1 && r[idxSDKCB] ? String(r[idxSDKCB]) : '',
+                barcode: idxBarcode !== -1 && r[idxBarcode] ? String(r[idxBarcode]) : '',
+                title: titleVal,
+                price: idxPrice !== -1 && r[idxPrice] ? String(r[idxPrice]) : '',
+                monloai: idxMonLoai !== -1 && r[idxMonLoai] ? String(r[idxMonLoai]) : '',
+                kho: idxKho !== -1 && r[idxKho] ? String(r[idxKho]) : ''
+              });
+              countImported++;
+            }
           }
         }
         localStorage.setItem('lib_books', JSON.stringify(books));
         logAction(`Nhập ${countImported} đầu sách từ file Excel`);
         renderBooks();
-        alert(`Nhập thành công ${countImported} đầu sách vào kho!`);
+        alert(`Tải dữ liệu thành công ${countImported} đầu sách vào Kho!`);
       };
       reader.readAsArrayBuffer(fileInput.files[0]);
     }
@@ -398,9 +476,9 @@
       tbody.innerHTML = '';
 
       const filtered = stories.filter(s => 
-        s.name.toLowerCase().includes(keyword) || 
-        s.code.toLowerCase().includes(keyword) || 
-        s.period.toLowerCase().includes(keyword)
+        (s.name && s.name.toLowerCase().includes(keyword)) || 
+        (s.code && s.code.toLowerCase().includes(keyword)) || 
+        (s.period && s.period.toLowerCase().includes(keyword))
       );
       document.getElementById('story-count').innerText = stories.length;
 
@@ -447,6 +525,7 @@
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(sheet, {header: 1});
 
+        let countImported = 0;
         for (let i = 1; i < rows.length; i++) {
           const r = rows[i];
           if (r && (r[0] || r[1] || r[2])) {
@@ -455,12 +534,13 @@
               code: String(r[1] || ''),
               name: String(r[2] || '')
             });
+            countImported++;
           }
         }
         localStorage.setItem('lib_stories', JSON.stringify(stories));
-        logAction('Nhập danh sách truyện từ file Excel');
+        logAction(`Nhập ${countImported} truyện từ file Excel`);
         renderStories();
-        alert('Nhập thành công danh sách truyện vào hệ thống!');
+        alert(`Nhập thành công ${countImported} truyện vào hệ thống!`);
       };
       reader.readAsArrayBuffer(fileInput.files[0]);
     }
