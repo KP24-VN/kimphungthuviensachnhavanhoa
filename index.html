@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý Thư viện & Báo cáo</title>
+  <title>Quản lý Thư viện & Báo cáo - Dùng chung</title>
   <!-- Thư viện đọc file Excel (.xlsx) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
@@ -26,9 +26,29 @@
       color: white;
       padding: 20px;
       text-align: center;
+      position: relative;
     }
     header h1 { margin: 0 0 5px 0; font-size: 1.6rem; }
     header p { margin: 3px 0; font-size: 0.95rem; opacity: 0.9; }
+    .user-bar {
+      max-width: 1100px;
+      margin: 15px auto 0 auto;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 8px 15px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .user-bar input {
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 0.9rem;
+      width: 250px;
+    }
     main {
       max-width: 1100px;
       margin: 20px auto;
@@ -55,9 +75,7 @@
       width: 100%;
       font-family: inherit;
     }
-    nav button:hover {
-      background: #e8f5e9;
-    }
+    nav button:hover { background: #e8f5e9; }
     nav button small { display: block; font-size: 0.75rem; color: #666; font-weight: normal; margin-top: 3px; }
     section {
       background: var(--card);
@@ -99,13 +117,8 @@
     th, td { padding: 8px; text-align: left; }
     th { background-color: #f8f9fa; white-space: nowrap; }
     .search-box {
-      margin: 15px 0;
-      padding: 10px;
-      width: 100%;
-      box-sizing: border-box;
-      border: 2px solid var(--primary);
-      border-radius: 6px;
-      font-size: 0.95rem;
+      margin: 15px 0; padding: 10px; width: 100%; box-sizing: border-box;
+      border: 2px solid var(--primary); border-radius: 6px; font-size: 0.95rem;
     }
     .report-card {
       border: 1px solid var(--border); padding: 15px; margin-top: 15px;
@@ -119,7 +132,12 @@
 
   <header>
     <h1>🌿 Quản lý Thư viện & Báo cáo</h1>
-    <p>Hệ thống lưu trữ & Quản lý mượn trả nội bộ</p>
+    <p>Hệ thống máy chủ lưu trữ dữ liệu chung & Quản lý mượn trả nội bộ</p>
+    
+    <div class="user-bar">
+      <label for="current-user" style="font-weight:600;">👤 Đang đăng nhập (Tên / Gmail):</label>
+      <input type="text" id="current-user" placeholder="Nhập Gmail hoặc Tên của bạn..." onchange="saveUserSession()">
+    </div>
   </header>
 
   <main>
@@ -127,8 +145,8 @@
       <button type="button" onclick="switchTab('sec-books')">📚 1. Thư viện sách<br><small>Kho sách · Nhập Excel</small></button>
       <button type="button" onclick="switchTab('sec-stories')">🔎 2. Danh sách truyện<br><small>Tải Excel 2.000+ truyện</small></button>
       <button type="button" onclick="switchTab('sec-reports')">🖼️ 3. Bảng báo cáo<br><small>Tải ảnh & nội dung</small></button>
-      <button type="button" onclick="switchTab('sec-manage')">🧑‍💼 4. Nhật ký<br><small>Lịch sử thao tác</small></button>
-      <button type="button" onclick="switchTab('sec-house-loans')">🏠 5. Mượn/Trả 9 Nhà<br><small>Mượn truyện theo nhà</small></button>
+      <button type="button" onclick="switchTab('sec-manage')">🧑‍💼 4. Nhật ký máy chủ<br><small>Lịch sử hành động & Gmail</small></button>
+      <button type="button" onclick="switchTab('sec-house-loans')">🏠 5. Mượn/Trả 9 Nhà<br><small>Có tên người mượn</small></button>
     </nav>
 
     <!-- 1. KHO SÁCH -->
@@ -136,7 +154,7 @@
       <h2>📚 Thư viện sách</h2>
       <div class="excel-box">
         <h3>📥 Nhập kho sách từ File Excel (.xlsx / .csv)</h3>
-        <p style="font-size:0.85rem; color:#555;">Tự động nhận diện cột từ Excel: <strong>STT | Tên đơn vị | Số thẻ | SĐKCB | Barcode | Tên sách | Giá tiền | Môn loại | Kho</strong></p>
+        <p style="font-size:0.85rem; color:#555;">Cột Excel chuẩn: <strong>STT | Tên đơn vị | Số thẻ | SĐKCB | Barcode | Tên sách | Giá tiền | Môn loại | Kho</strong></p>
         <input type="file" id="excel-books-input" accept=".xlsx, .xls, .csv">
         <br><br>
         <button type="button" class="btn-action" onclick="importBooksExcel()">Tải dữ liệu Excel vào Kho</button>
@@ -189,7 +207,7 @@
       <h2>🔎 Danh sách truyện (Hỗ trợ > 2.000 truyện)</h2>
       <div class="excel-box">
         <h3>📥 Nhập 2.000+ Truyện từ File Excel (.xlsx / .csv)</h3>
-        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong> Mã sách | Tên truyện</strong></p>
+        <p style="font-size:0.85rem; color:#555;">Cột Excel: <strong>Kỳ/Tháng | Mã sách | Tên truyện</strong></p>
         <input type="file" id="excel-stories-input" accept=".xlsx, .xls, .csv">
         <br><br>
         <button type="button" class="btn-action" onclick="importStoriesExcel()">Tải danh sách Excel lên</button>
@@ -235,14 +253,14 @@
       <div id="report-list"></div>
     </section>
 
-    <!-- 4. NHẬT KÝ THAO TÁC -->
+    <!-- 4. NHẬT KÝ MÁY CHỦ -->
     <section id="sec-manage">
-      <h2>🧑‍💼 Nhật ký hệ thống</h2>
-      <p>Lịch sử các hoạt động thêm, xóa, nhập liệu gần đây.</p>
+      <h2>🧑‍💼 Nhật ký hoạt động hệ thống</h2>
+      <p>Lịch sử chi tiết hành động và tên Gmail của người dùng thực hiện.</p>
       <div class="table-responsive">
         <table>
           <thead>
-            <tr><th>Thời gian</th><th>Hành động</th></tr>
+            <tr><th>Thời gian</th><th>Tài khoản (Gmail / Tên)</th><th>Hành động</th></tr>
           </thead>
           <tbody id="log-tbody"></tbody>
         </table>
@@ -271,6 +289,7 @@
               <option value="Nhà 9">Nhà 9</option>
             </select>
           </div>
+          <div class="form-group"><label>Tên người mượn</label><input type="text" id="l-person" required placeholder="Họ tên người mượn..."></div>
           <div class="form-group"><label>Tên sách / Truyện mượn</label><input type="text" id="l-book" required placeholder="Tên sách..."></div>
           <div class="form-group"><label>Ngày mượn</label><input type="date" id="l-date" required></div>
         </div>
@@ -281,7 +300,7 @@
       <div class="table-responsive">
         <table>
           <thead>
-            <tr><th>Nhà</th><th>Tên sách</th><th>Ngày mượn</th><th>Trạng thái</th><th>Thao tác</th></tr>
+            <tr><th>Nhà</th><th>Người mượn</th><th>Tên sách</th><th>Ngày mượn</th><th>Trạng thái</th><th>Thao tác</th></tr>
           </thead>
           <tbody id="loan-tbody"></tbody>
         </table>
@@ -294,12 +313,29 @@
   </footer>
 
   <script>
-    // --- KHỞI TẠO DỮ LIỆU LOCALSTORAGE ---
+    // --- KHỞI TẠO DỮ LIỆU CHUNG (LOCALSTORAGE) ---
     let books = JSON.parse(localStorage.getItem('lib_books')) || [];
     let stories = JSON.parse(localStorage.getItem('lib_stories')) || [];
     let reports = JSON.parse(localStorage.getItem('lib_reports')) || [];
     let loans = JSON.parse(localStorage.getItem('lib_loans')) || [];
     let logs = JSON.parse(localStorage.getItem('lib_logs')) || [];
+
+    // Quản lý tên Gmail người dùng hiện tại
+    let currentUser = localStorage.getItem('lib_current_user') || '';
+    document.getElementById('current-user').value = currentUser;
+
+    function saveUserSession() {
+      currentUser = document.getElementById('current-user').value.trim();
+      localStorage.setItem('lib_current_user', currentUser);
+    }
+
+    function getActiveUser() {
+      currentUser = document.getElementById('current-user').value.trim();
+      if(!currentUser) {
+        return "Khách / Chưa rõ Gmail";
+      }
+      return currentUser;
+    }
 
     // --- CHUYỂN TAB ---
     function switchTab(targetId) {
@@ -314,13 +350,14 @@
 
     function logAction(text) {
       const time = new Date().toLocaleString('vi-VN');
-      logs.unshift({ time, text });
-      if (logs.length > 50) logs.pop();
+      const user = getActiveUser();
+      logs.unshift({ time, user, text });
+      if (logs.length > 100) logs.pop();
       localStorage.setItem('lib_logs', JSON.stringify(logs));
       renderLogs();
     }
 
-    // --- 1. KHO SÁCH (Tối ưu theo đúng ảnh Excel mới) ---
+    // --- 1. KHO SÁCH ---
     function addBook(e) {
       e.preventDefault();
       const donvi = document.getElementById('b-donvi').value.trim();
@@ -397,7 +434,6 @@
       }
     }
 
-    // Đọc Excel linh hoạt tự dò tìm cột theo tên trong Ảnh 2
     function importBooksExcel() {
       const fileInput = document.getElementById('excel-books-input');
       if (!fileInput.files.length) return alert('Vui lòng chọn file Excel!');
@@ -410,7 +446,6 @@
 
         if (rows.length < 2) return alert('File Excel không có dữ liệu!');
 
-        // Dò vị trí cột dựa vào dòng tiêu đề (Dòng 0)
         const headerRow = rows[0].map(col => String(col || '').trim().toLowerCase());
         
         let idxSTT = headerRow.findIndex(c => c.includes('stt'));
@@ -423,7 +458,6 @@
         let idxMonLoai = headerRow.findIndex(c => c.includes('môn loại') || c.includes('mon loai'));
         let idxKho = headerRow.findIndex(c => c.includes('kho'));
 
-        // Mặc định nếu không tìm thấy tiêu đề thì lấy theo đúng thứ tự cột từ Ảnh 2
         if (idxTitle === -1) idxTitle = 5;
         if (idxSDKCB === -1) idxSDKCB = 3;
 
@@ -449,7 +483,7 @@
           }
         }
         localStorage.setItem('lib_books', JSON.stringify(books));
-        logAction(`Nhập ${countImported} đầu sách từ file Excel`);
+        logAction(`Nhập ${countImported} đầu sách từ file Excel vào kho`);
         renderBooks();
         alert(`Tải dữ liệu thành công ${countImported} đầu sách vào Kho!`);
       };
@@ -604,11 +638,11 @@
       const tbody = document.getElementById('log-tbody');
       tbody.innerHTML = '';
       if(logs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2" style="text-align:center; color:#666;">Chưa có lịch sử thao tác.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#666;">Chưa có lịch sử thao tác.</td></tr>`;
         return;
       }
       logs.forEach(l => {
-        tbody.innerHTML += `<tr><td>${l.time}</td><td>${l.text}</td></tr>`;
+        tbody.innerHTML += `<tr><td>${l.time}</td><td><strong>${l.user || 'Khẩn/Ẩn danh'}</strong></td><td>${l.text}</td></tr>`;
       });
     }
 
@@ -622,12 +656,13 @@
     function addLoan(e) {
       e.preventDefault();
       const house = document.getElementById('l-house').value;
+      const person = document.getElementById('l-person').value.trim();
       const book = document.getElementById('l-book').value.trim();
       const date = document.getElementById('l-date').value;
 
-      loans.push({ house, book, date, status: 'Đang mượn' });
+      loans.push({ house, person, book, date, status: 'Đang mượn' });
       localStorage.setItem('lib_loans', JSON.stringify(loans));
-      logAction(`${house} mượn sách: ${book}`);
+      logAction(`${house} (Người mượn: ${person}) mượn sách: ${book}`);
       document.getElementById('loan-form').reset();
       renderLoans();
     }
@@ -636,13 +671,14 @@
       const tbody = document.getElementById('loan-tbody');
       tbody.innerHTML = '';
       if(loans.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#666;">Chưa có lịch sử mượn sách nào.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#666;">Chưa có lịch sử mượn sách nào.</td></tr>`;
         return;
       }
       loans.forEach((l, index) => {
         tbody.innerHTML += `
           <tr>
             <td><strong>${l.house}</strong></td>
+            <td>${l.person}</td>
             <td>${l.book}</td>
             <td>${l.date}</td>
             <td><span style="color:${l.status === 'Đang mượn' ? '#d9534f' : '#2e7d32'}; font-weight:bold;">${l.status}</span></td>
@@ -658,7 +694,7 @@
     function returnBook(index) {
       loans[index].status = 'Đã trả';
       localStorage.setItem('lib_loans', JSON.stringify(loans));
-      logAction(`${loans[index].house} đã trả sách: ${loans[index].book}`);
+      logAction(`${loans[index].house} (Người mượn: ${loans[index].person}) đã trả sách: ${loans[index].book}`);
       renderLoans();
     }
 
